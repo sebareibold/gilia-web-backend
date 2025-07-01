@@ -1,6 +1,6 @@
 # GILIA Web Backend
 
-Backend API para el sitio web del Grupo de Investigación en Lingüística e Inteligencia Artificial (GILIA).
+Backend API para el sitio web del Grupo de Investigación en Lenguaje e Inteligencia Artificial (GILIA).
 
 ## 📋 Descripción
 
@@ -44,7 +44,6 @@ Este proyecto proporciona una API RESTful completa para gestionar el contenido d
 
 4. **Iniciar el servidor**
    ```shell
-   # Modo desarrollo (con recarga automática)
    npm run dev
    
    # Modo producción
@@ -88,7 +87,7 @@ JWT_SECRET=tu-clave-secreta-aqui
 
 ### Patrones Implementados
 
-- **Repository Pattern**: Abstrae el acceso a datos
+- **Repository Pattern**: Abstrae el acceso a datos, nos permite elegir si utilizar el json o bien la BD de PostgreSQL (Algo que todavia no esta implementado)
 - **Factory Pattern**: Crea repositorios según configuración
 - **Service Layer Pattern**: Contiene lógica de negocio
 - **Manager Pattern**: Maneja peticiones HTTP
