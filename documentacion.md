@@ -25,7 +25,6 @@ classDiagram
         +String link_github
         +Array~String~ especialidades
         +Integer usuario_id
-
     }
 
     class Investigacion {
@@ -35,7 +34,6 @@ classDiagram
         +String link
         +String imagen
         +Boolean activo
-
     }
 
     class LineaInvestigacion {
@@ -44,7 +42,6 @@ classDiagram
         +String descripcion
         +Array~String~ imagenes
         +Boolean activo
-
     }
 
     class Publicacion {
@@ -99,7 +96,6 @@ classDiagram
         +String icono
         +Integer orden
         +Boolean activo
-
     }
 
     class SeccionGaleria {
@@ -115,10 +111,10 @@ classDiagram
     Novedad <|-- Investigacion
     Novedad <|-- Extension
     Persona <|-- Usuario
-    Investigacion "1" o-- "*" "Linea de Investigacion" : contiene
-    Extension "1" o-- "*" "Lineas de Extension" : contiene
-    "Linea de Investigacion" "1" o-- "*" Publicacion : genera
-    "Lineas de Extension" "1" o-- "*" Proyecto : desarrolla
+    Investigacion "1" o-- "*" LineaInvestigacion : contiene
+    Extension "1" o-- "*" LineaExtension : contiene
+    LineaInvestigacion "1" o-- "*" Publicacion : genera
+    LineaExtension "1" o-- "*" Proyecto : desarrolla
     Publicacion "*" o-- "*" Persona : autor
     Proyecto "*" o-- "*" Persona : participa
 ```
