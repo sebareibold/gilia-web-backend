@@ -1,7 +1,6 @@
-const BaseService = require("../services/BaseService")
+const BaseService = require("../service/BaseService")
 const RepositoryFactory = require("../repositories/RepositoryFactory")
 const ResponseHelper = require("../utils/responseHelper")
-const { validateRequest } = require("../middleware/validation")
 
 // Crear el servicio usando el factory
 const { Novedad } = require("../models")

@@ -1,4 +1,4 @@
-const BaseService = require("../services/BaseService")
+const BaseService = require("../service/BaseService")
 const RepositoryFactory = require("../repositories/RepositoryFactory")
 const ResponseHelper = require("../utils/responseHelper")
 
