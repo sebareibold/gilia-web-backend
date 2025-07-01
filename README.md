@@ -26,40 +26,38 @@ Este proyecto proporciona una API RESTful completa para gestionar el contenido d
 ### Instalación
 
 1. **Clonar el repositorio**
-   \`\`\`bash
+   ```shell
    git clone <repository-url>
    cd gilia-web-backend
-   \`\`\`
+   ```
 
 2. **Instalar dependencias**
-   \`\`\`bash
+   ```shell
    npm install
-   \`\`\`
+   ```
 
 3. **Configurar variables de entorno**
-   \`\`\`bash
+   ```shell
    cp .env.example .env
    # Editar .env con tu configuración
-   \`\`\`
+   ```
 
 4. **Iniciar el servidor**
-   \`\`\`bash
+   ```shell
    # Modo desarrollo (con recarga automática)
    npm run dev
    
    # Modo producción
    npm start
-   \`\`\`
+   ```
 
 ### Configuración Rápida (Modo JSON)
 
-Para desarrollo rápido, puedes usar el modo JSON sin configurar base de datos:
-
-\`\`\`env
+```env
 USE_DATABASE=false
 PORT=8080
 JWT_SECRET=tu-clave-secreta-aqui
-\`\`\`
+```
 
 ## 🏗️ Arquitectura
 
@@ -72,7 +70,7 @@ JWT_SECRET=tu-clave-secreta-aqui
 
 ### Estructura de Capas
 
-\`\`\`
+```
 ┌─────────────────────────────────────┐
 │           Capa de Presentación      │
 │         (Managers/Controllers)      │
@@ -86,7 +84,7 @@ JWT_SECRET=tu-clave-secreta-aqui
 │         Capa de Persistencia        │
 │        (JSON Files/PostgreSQL)      │
 └─────────────────────────────────────┘
-\`\`\`
+```
 
 ### Patrones Implementados
 
@@ -124,40 +122,40 @@ JWT_SECRET=tu-clave-secreta-aqui
 ## 🔌 API Endpoints
 
 ### Autenticación
-\`\`\`
+```
 POST /api/usuarios/login          # Iniciar sesión
-\`\`\`
+```
 
 ### Gestión de Usuarios
-\`\`\`
+```
 GET    /api/usuarios              # Listar usuarios
 GET    /api/usuarios/:id          # Obtener usuario
 POST   /api/usuarios              # Crear usuario
 PUT    /api/usuarios/:id          # Actualizar usuario
 DELETE /api/usuarios/:id          # Eliminar usuario
-\`\`\`
+```
 
 ### Contenido Principal
-\`\`\`
+```
 GET    /api/novedades             # Listar novedades
 GET    /api/investigaciones       # Listar investigaciones
 GET    /api/publicaciones         # Listar publicaciones
 GET    /api/personas              # Listar equipo
 GET    /api/extensiones           # Listar extensiones
-\`\`\`
+```
 
 ### Contenido Dinámico
-\`\`\`
-GET    /api/contenido-home        # Contenido página principal
+```
+GET    /api/contenido-home         # Contenido página principal
 GET    /api/contenido-presentacion # Contenido presentación
-GET    /api/objetivos             # Objetivos del grupo
-GET    /api/tarjetas-flotantes    # Elementos destacados
-\`\`\`
+GET    /api/objetivos              # Objetivos del grupo
+GET    /api/tarjetas-flotantes     # Elementos destacados
+```
 
 ### Utilidades
-\`\`\`
+```
 GET    /api/health               # Estado del servidor
-\`\`\`
+```
 
 ## 🛡️ Seguridad
 
@@ -177,18 +175,18 @@ GET    /api/health               # Estado del servidor
 
 ### Variables de Entorno
 
-| Variable | Descripción | Valor por Defecto |
-|----------|-------------|-------------------|
-| `USE_DATABASE` | Usar PostgreSQL (true) o JSON (false) | `false` |
-| `PORT` | Puerto del servidor | `8080` |
-| `NODE_ENV` | Entorno de ejecución | `development` |
-| `DB_HOST` | Host de PostgreSQL | `localhost` |
-| `DB_PORT` | Puerto de PostgreSQL | `5432` |
-| `DB_NAME` | Nombre de la base de datos | `gilia_research_db` |
-| `DB_USER` | Usuario de PostgreSQL | `postgres` |
-| `DB_PASSWORD` | Contraseña de PostgreSQL | `password` |
-| `JWT_SECRET` | Clave secreta para JWT | `default-secret` |
-| `JWT_EXPIRES_IN` | Tiempo de expiración del token | `24h` |
+| Variable         | Descripción                        | Valor por Defecto   |
+|------------------|------------------------------------|---------------------|
+| `USE_DATABASE`   | Usar PostgreSQL (true) o JSON (false) | `false`          |
+| `PORT`           | Puerto del servidor                | `8080`              |
+| `NODE_ENV`       | Entorno de ejecución               | `development`       |
+| `DB_HOST`        | Host de PostgreSQL                 | `localhost`         |
+| `DB_PORT`        | Puerto de PostgreSQL               | `5432`              |
+| `DB_NAME`        | Nombre de la base de datos         | `gilia_research_db` |
+| `DB_USER`        | Usuario de PostgreSQL              | `postgres`          |
+| `DB_PASSWORD`    | Contraseña de PostgreSQL           | `password`          |
+| `JWT_SECRET`     | Clave secreta para JWT             | `default-secret`    |
+| `JWT_EXPIRES_IN` | Tiempo de expiración del token     | `24h`               |
 
 ### Modos de Operación
 
@@ -206,7 +204,7 @@ GET    /api/health               # Estado del servidor
 
 ## 🧪 Testing
 
-\`\`\`bash
+```shell
 # Ejecutar pruebas
 npm test
 
@@ -215,23 +213,23 @@ npm run test:coverage
 
 # Ejecutar en modo watch
 npm run test:watch
-\`\`\`
+```
 
 ## 📝 Desarrollo
 
 ### Scripts Disponibles
 
-\`\`\`bash
+```shell
 npm start          # Iniciar servidor
 npm run dev        # Desarrollo con recarga automática
 npm test           # Ejecutar pruebas
 npm run lint       # Verificar código
 npm run lint:fix   # Corregir problemas de código
-\`\`\`
+```
 
 ### Estructura del Proyecto
 
-\`\`\`
+```
 src/
 ├── config/          # Configuración y constantes
 ├── database/        # Archivos JSON (modo desarrollo)
@@ -243,7 +241,7 @@ src/
 ├── service/         # Lógica de negocio
 ├── utils/           # Utilidades y helpers
 └── server.js        # Configuración del servidor
-\`\`\`
+```
 
 ## 🚀 Despliegue
 
@@ -257,7 +255,7 @@ src/
 
 ### Ejemplo de Despliegue con Docker
 
-\`\`\`dockerfile
+```dockerfile
 FROM node:18-alpine
 WORKDIR /app
 COPY package*.json ./
@@ -265,7 +263,7 @@ RUN npm ci --only=production
 COPY . .
 EXPOSE 8080
 CMD ["npm", "start"]
-\`\`\`
+```
 
 ## 🤝 Contribución
 

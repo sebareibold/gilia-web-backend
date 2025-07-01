@@ -132,11 +132,11 @@ classDiagram
     %% Relaciones del Dominio
     Usuario ||--o| Persona : "tiene"
     Persona ||--o{ Publicacion : "publica"
-
 ```
 
-# 2. Diagrama de Clases de Contenido Dinámico
+### 2. Diagrama de Clases de Contenido Dinámico
 
+```mermaid
 classDiagram
     %% Entidades de Contenido de la Interfaz
     class ContenidoHome {
@@ -266,9 +266,11 @@ classDiagram
     ContenidoEquipo --> TeamPageComponent : "alimenta"
     ContenidoGaleria --> GalleryPageComponent : "alimenta"
     TarjetaFlotante --> HomePageComponent : "alimenta"
+```
 
-# 3. Diagrama de Arquitectura del Sistema
+### 3. Diagrama de Arquitectura del Sistema
 
+```mermaid
 graph TB
     %% Capa de Presentación
     subgraph "Capa de Presentación"
@@ -339,9 +341,11 @@ graph TB
     AUTH -.-> UM
     VALID -.-> NM
     ERROR -.-> BS
+```
 
-# 4. Diagrama de Flujo de Peticiones HTTP
+### 4. Diagrama de Flujo de Peticiones HTTP
 
+```mermaid
 sequenceDiagram
     participant Client
     participant Routes
@@ -380,9 +384,11 @@ sequenceDiagram
     Service-->>Manager: Business Result
     Manager->>Manager: Format Response
     Manager-->>Client: HTTP Response
+```
 
-# 5. Diagrama de Estados de Autenticación
+### 5. Diagrama de Estados de Autenticación
 
+```mermaid
 stateDiagram-v2
     [*] --> Unauthenticated
     
@@ -413,9 +419,11 @@ stateDiagram-v2
         CanRead --> CanWrite : Role Upgrade
         CanWrite --> CanDelete : Role Upgrade
     }
+```
 
-# 6. Diagrama de Componentes del Sistema
+### 6. Diagrama de Componentes del Sistema
 
+```mermaid
 graph LR
     %% Componentes Externos
     subgraph "Cliente"
@@ -480,25 +488,27 @@ graph LR
     EXPRESS --> LOGGER
 
     FILES -.-> JSON_DB
+```
 
-#  7. Diagrama de Despliegue
+### 7. Diagrama de Despliegue
 
+```mermaid
 graph TB
     %% Entorno de Desarrollo
     subgraph "Development Environment"
-        DEV_SERVER[Development Server<br/>Node.js + Express]
-        DEV_JSON[JSON Files<br/>Local Storage]
+        DEV_SERVER[Development Server\nNode.js + Express]
+        DEV_JSON[JSON Files\nLocal Storage]
         DEV_SERVER --> DEV_JSON
     end
 
     %% Entorno de Producción
     subgraph "Production Environment"
-        LOAD_BALANCER[Load Balancer<br/>nginx/Apache]
+        LOAD_BALANCER[Load Balancer\nnginx/Apache]
         
         subgraph "Application Servers"
-            APP1[App Server 1<br/>Node.js + Express]
-            APP2[App Server 2<br/>Node.js + Express]
-            APP3[App Server N<br/>Node.js + Express]
+            APP1[App Server 1\nNode.js + Express]
+            APP2[App Server 2\nNode.js + Express]
+            APP3[App Server N\nNode.js + Express]
         end
         
         subgraph "Database Cluster"
@@ -507,8 +517,8 @@ graph TB
         end
         
         subgraph "Monitoring & Logging"
-            MONITOR[Monitoring<br/>Prometheus/Grafana]
-            LOGS[Centralized Logging<br/>ELK Stack]
+            MONITOR[Monitoring\nPrometheus/Grafana]
+            LOGS[Centralized Logging\nELK Stack]
         end
     end
 
@@ -530,3 +540,4 @@ graph TB
     APP1 --> LOGS
     APP2 --> LOGS
     APP3 --> LOGS
+```
