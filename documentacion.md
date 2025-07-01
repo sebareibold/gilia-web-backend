@@ -123,7 +123,6 @@ classDiagram
 
 ```mermaid
 classDiagram
-    %% Entidades de Contenido de la Interfaz
     class ContenidoHome {
         +Integer id
         +String titulo
@@ -200,7 +199,6 @@ classDiagram
         +Date updated_at
     }
 
-    %% Componentes de UI que gestionan el contenido
     class HomePageComponent {
         +renderHero()
         +renderObjectives()
@@ -242,15 +240,6 @@ classDiagram
         +renderImageModal()
         +renderSectionNavigation()
     }
-
-    %% Relaciones entre contenido y componentes
-    ContenidoHome --> HomePageComponent : "alimenta"
-    ContenidoPresentacion --> PresentationPageComponent : "alimenta"
-    ContenidoNovedades --> NewsPageComponent : "alimenta"
-    ContenidoPublicaciones --> PublicationsPageComponent : "alimenta"
-    ContenidoEquipo --> TeamPageComponent : "alimenta"
-    ContenidoGaleria --> GalleryPageComponent : "alimenta"
-    TarjetaFlotante --> HomePageComponent : "alimenta"
 ```
 
 ### 3. Diagrama de Arquitectura del Sistema
