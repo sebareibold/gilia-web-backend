@@ -1,6 +1,50 @@
 # GILIA Web Backend
 
-Backend API para el sitio web del Grupo de Investigación en Lenguaje e Inteligencia Artificial (GILIA).
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white) ![Sequelize](https://img.shields.io/badge/Sequelize-52B0E7?style=for-the-badge&logo=sequelize&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+
+---
+
+## ¿Qué es este proyecto?
+
+GILIA Web Backend es la API RESTful que gestiona toda la información del sitio web del Grupo de Investigación en Lenguaje e Inteligencia Artificial (GILIA). Permite administrar investigaciones, publicaciones, equipo, noticias, extensiones y más, con seguridad y flexibilidad para desarrollo y producción.
+
+- **API RESTful** para todas las entidades principales.
+- **Almacenamiento dual**: elige entre archivos JSON (desarrollo) o PostgreSQL (producción).
+- **Seguridad**: autenticación JWT, roles, validación y encriptación de contraseñas.
+- **Arquitectura escalable**: patrones Repository, Factory, Service y Manager.
+- **Configuración flexible** mediante variables de entorno.
+
+---
+
+## 🚀 Tecnologías Principales
+
+- **Node.js**: Entorno de ejecución para JavaScript en el servidor.
+- **Express.js**: Framework web minimalista para crear APIs rápidas y robustas.
+- **Sequelize**: ORM para trabajar con bases de datos SQL usando JavaScript.
+- **PostgreSQL**: Base de datos relacional robusta y confiable.
+- **JavaScript**: Lenguaje principal del backend.
+
+## 🏗️ Arquitectura y Carpetas Principales
+
+- **src/routes/**: Define todos los endpoints de la API.
+- **src/managers/**: Controladores (Managers) que procesan la lógica de cada entidad.
+- **src/service/**: Lógica de negocio y servicios reutilizables.
+- **src/repositories/**: Acceso a datos, tanto para JSON como para PostgreSQL.
+- **src/models/**: Definición de entidades y modelos de datos.
+- **src/database/**: Persistencia de datos (archivos JSON y helpers de base de datos).
+- **src/config/**: Configuración general y de base de datos.
+- **src/utils/**: Helpers y utilidades comunes.
+- **src/milddleware/**: Middlewares para validación y manejo de errores.
+
+## 📦 Principales Características
+
+- **Almacenamiento dual**: modo desarrollo (JSON) y modo producción (PostgreSQL).
+- **Autenticación JWT** y roles de usuario.
+- **Validación y sanitización** de datos de entrada.
+- **Gestión completa** de usuarios, publicaciones, proyectos, equipo, novedades, objetivos, líneas de investigación y más.
+- **Configuración por variables de entorno** para fácil despliegue.
+
+---
 
 ## 📋 Descripción
 
