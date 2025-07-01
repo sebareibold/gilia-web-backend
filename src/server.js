@@ -4,54 +4,22 @@ const helmet = require("helmet")
 const morgan = require("morgan")
 require("dotenv").config()
 
-// Import route modules
-const usuarioRoutes = require("./routes/usuarioRoutes")
-const personaRoutes = require("./routes/personaRoutes")
-const lineaInvestigacionRoutes = require("./routes/lineaInvestigacionRoutes")
-const publicacionRoutes = require("./routes/publicacionRoutes")
-const proyectoRoutes = require("./routes/proyectoRoutes")
-const lineaExtensionRoutes = require("./routes/lineaExtensionRoutes")
-const novedadRoutes = require("./routes/novedadRoutes")
-const extensionRoutes = require("./routes/extensionRoutes")
-const investigacionRoutes = require("./routes/investigacionRoutes")
-const objetivoRoutes = require("./routes/objetivoRoutes")
-const contenidoPresentacionRoutes = require("./routes/contenidoPresentacionRoutes")
-const tarjetaFlotanteRoutes = require("./routes/tarjetaFlotanteRoutes")
-const contenidoHomeRoutes = require("./routes/contenidoHomeRoutes")
-const contenidoNovedadesRoutes = require("./routes/contenidoNovedadesRoutes")
-const contenidoPublicacionesRoutes = require("./routes/contenidoPublicacionesRoutes")
-const contenidoExtensionRoutes = require("./routes/contenidoExtensionRoutes")
-const contenidoEquipoRoutes = require("./routes/contenidoEquipoRoutes")
-const contenidoGaleriaRoutes = require("./routes/contenidoGaleriaRoutes")
+// Import centralized routes
+const apiRoutes = require("./routes")
 
 const app = express()
 
-// Middlewares
+// Middlewares de seguridad y logging
 app.use(helmet())
 app.use(cors())
 app.use(morgan("combined"))
+
+// Middlewares de parsing
 app.use(express.json({ limit: "10mb" }))
 app.use(express.urlencoded({ extended: true, limit: "10mb" }))
 
-// Routes
-app.use("/api/usuarios", usuarioRoutes)
-app.use("/api/personas", personaRoutes)
-app.use("/api/lineas-investigacion", lineaInvestigacionRoutes)
-app.use("/api/publicaciones", publicacionRoutes)
-app.use("/api/proyectos", proyectoRoutes)
-app.use("/api/lineas-extension", lineaExtensionRoutes)
-app.use("/api/novedades", novedadRoutes)
-app.use("/api/extensiones", extensionRoutes)
-app.use("/api/investigaciones", investigacionRoutes)
-app.use("/api/objetivos", objetivoRoutes)
-app.use("/api/contenido-presentacion", contenidoPresentacionRoutes)
-app.use("/api/tarjetas-flotantes", tarjetaFlotanteRoutes)
-app.use("/api/contenido-home", contenidoHomeRoutes)
-app.use("/api/contenido-novedades", contenidoNovedadesRoutes)
-app.use("/api/contenido-publicaciones", contenidoPublicacionesRoutes)
-app.use("/api/contenido-extension", contenidoExtensionRoutes)
-app.use("/api/contenido-equipo", contenidoEquipoRoutes)
-app.use("/api/contenido-galeria", contenidoGaleriaRoutes)
+// API Routes - Centralizado
+app.use("/api", apiRoutes)
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
@@ -59,17 +27,40 @@ app.get("/api/health", (req, res) => {
     success: true,
     message: "API funcionando correctamente",
     timestamp: new Date().toISOString(),
+    version: process.env.API_VERSION || "1.0.0",
   })
 })
 
-
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack)
-  res.status(500).json({
+  console.error("Error:", err.stack)
+
+  // Error de validación de Sequelize
+  if (err.name === "SequelizeValidationError") {
+    return res.status(400).json({
+      success: false,
+      message: "Error de validación",
+      errors: err.errors.map((e) => ({
+        field: e.path,
+        message: e.message,
+      })),
+    })
+  }
+
+  // Error de clave duplicada
+  if (err.name === "SequelizeUniqueConstraintError") {
+    return res.status(409).json({
+      success: false,
+      message: "Recurso ya existe",
+      error: "Datos duplicados",
+    })
+  }
+
+  // Error genérico
+  res.status(err.status || 500).json({
     success: false,
-    message: "Error interno del servidor",
-    error: process.env.NODE_ENV === "development" ? err.message : {},
+    message: err.message || "Error interno del servidor",
+    error: process.env.NODE_ENV === "development" ? err.stack : {},
   })
 })
 
@@ -77,7 +68,7 @@ app.use((err, req, res, next) => {
 app.use("*", (req, res) => {
   res.status(404).json({
     success: false,
-    message: "Ruta no encontrada",
+    message: `Ruta no encontrada: ${req.method} ${req.originalUrl}`,
   })
 })
 

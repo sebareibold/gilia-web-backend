@@ -1,13 +1,44 @@
 const express = require("express")
 const router = express.Router()
 
+// Importar todas las rutas
+const usuarioRoutes = require("./usuarioRoutes")
+const personaRoutes = require("./personaRoutes")
+const lineaInvestigacionRoutes = require("./lineaInvestigacionRoutes")
+const publicacionRoutes = require("./publicacionRoutes")
+const proyectoRoutes = require("./proyectoRoutes")
+const lineaExtensionRoutes = require("./lineaExtensionRoutes")
+const novedadRoutes = require("./novedadRoutes")
+const extensionRoutes = require("./extensionRoutes")
+const investigacionRoutes = require("./investigacionRoutes")
+const objetivoRoutes = require("./objetivoRoutes")
+const contenidoPresentacionRoutes = require("./contenidoPresentacionRoutes")
+const tarjetaFlotanteRoutes = require("./tarjetaFlotanteRoutes")
+const contenidoHomeRoutes = require("./contenidoHomeRoutes")
+const contenidoNovedadesRoutes = require("./contenidoNovedadesRoutes")
+const contenidoPublicacionesRoutes = require("./contenidoPublicacionesRoutes")
+const contenidoExtensionRoutes = require("./contenidoExtensionRoutes")
+const contenidoEquipoRoutes = require("./contenidoEquipoRoutes")
+const contenidoGaleriaRoutes = require("./contenidoGaleriaRoutes")
 
-const app = require("../server")
-
-const PORT = process.env.PORT || 3000
-
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`)
-})
+// Configurar rutas
+router.use("/usuarios", usuarioRoutes)
+router.use("/personas", personaRoutes)
+router.use("/lineas-investigacion", lineaInvestigacionRoutes)
+router.use("/publicaciones", publicacionRoutes)
+router.use("/proyectos", proyectoRoutes)
+router.use("/lineas-extension", lineaExtensionRoutes)
+router.use("/novedades", novedadRoutes)
+router.use("/extensiones", extensionRoutes)
+router.use("/investigaciones", investigacionRoutes)
+router.use("/objetivos", objetivoRoutes)
+router.use("/contenido-presentacion", contenidoPresentacionRoutes)
+router.use("/tarjetas-flotantes", tarjetaFlotanteRoutes)
+router.use("/contenido-home", contenidoHomeRoutes)
+router.use("/contenido-novedades", contenidoNovedadesRoutes)
+router.use("/contenido-publicaciones", contenidoPublicacionesRoutes)
+router.use("/contenido-extension", contenidoExtensionRoutes)
+router.use("/contenido-equipo", contenidoEquipoRoutes)
+router.use("/contenido-galeria", contenidoGaleriaRoutes)
 
 module.exports = router

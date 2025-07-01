@@ -1,78 +1,51 @@
-const { Usuario, Persona } = require("../models")
+const BaseService = require("../services/BaseService")
+const RepositoryFactory = require("../repositories/RepositoryFactory")
+const ResponseHelper = require("../utils/responseHelper")
+const ValidationHelper = require("../utils/validationHelper")
+const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+
+// Crear el servicio usando el factory
+const { Usuario } = require("../models")
+const usuarioRepository = RepositoryFactory.create("usuarios", Usuario)
+const usuarioService = new BaseService(usuarioRepository)
 
 class UsuarioManager {
   static async obtenerTodos(req, res) {
     try {
-      const { page = 1, limit = 10, rol } = req.query
-      const offset = (page - 1) * limit
+      const result = await usuarioService.findAll(req.query)
 
-      const whereClause = {}
-      if (rol) whereClause.rol = rol
-
-      const usuarios = await Usuario.findAndCountAll({
-        where: whereClause,
-        include: [
-          {
-            model: Persona,
-            as: "persona",
-          },
-        ],
-        attributes: { exclude: ["password"] },
-        limit: Number.parseInt(limit),
-        offset: Number.parseInt(offset),
-        order: [["created_at", "DESC"]],
+      // Remover passwords de la respuesta
+      const usuariosSinPassword = result.data.map((usuario) => {
+        const { password, ...usuarioSinPass } = usuario
+        return usuarioSinPass
       })
 
-      res.json({
-        success: true,
-        data: usuarios.rows,
-        pagination: {
-          total: usuarios.count,
-          page: Number.parseInt(page),
-          limit: Number.parseInt(limit),
-          totalPages: Math.ceil(usuarios.count / limit),
-        },
-      })
+      return ResponseHelper.successWithPagination(
+        res,
+        usuariosSinPassword,
+        result.pagination,
+        "Usuarios obtenidos exitosamente",
+      )
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Error al obtener usuarios",
-        error: error.message,
-      })
+      return ResponseHelper.error(res, "Error al obtener usuarios", 500, error.message)
     }
   }
 
   static async obtenerPorId(req, res) {
     try {
       const { id } = req.params
-      const usuario = await Usuario.findByPk(id, {
-        include: [
-          {
-            model: Persona,
-            as: "persona",
-          },
-        ],
-        attributes: { exclude: ["password"] },
-      })
+      const usuario = await usuarioService.findById(id, ["persona"])
 
-      if (!usuario) {
-        return res.status(404).json({
-          success: false,
-          message: "Usuario no encontrado",
-        })
-      }
+      // Remover password
+      const { password, ...usuarioSinPass } = usuario
 
-      res.json({
-        success: true,
-        data: usuario,
-      })
+      return ResponseHelper.success(res, usuarioSinPass, "Usuario encontrado")
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Error al obtener usuario",
-        error: error.message,
-      })
+      if (error.status === 404) {
+        return ResponseHelper.notFound(res, "Usuario no encontrado")
+      }
+      return ResponseHelper.error(res, "Error al obtener usuario", 500, error.message)
     }
   }
 
@@ -80,36 +53,37 @@ class UsuarioManager {
     try {
       const { email, password, rol } = req.body
 
-      // Verificar si el email ya existe
-      const usuarioExistente = await Usuario.findOne({ where: { email } })
-      if (usuarioExistente) {
-        return res.status(400).json({
-          success: false,
-          message: "El email ya está registrado",
-        })
+      // Validar email
+      if (!ValidationHelper.validateEmail(email)) {
+        return ResponseHelper.badRequest(res, "Email inválido")
       }
 
-      const usuario = await Usuario.create({
+      // Verificar si el email ya existe (para JSON)
+      if (process.env.USE_DATABASE !== "true") {
+        const existingUsers = await usuarioService.findAll({ limit: 1000 })
+        const emailExists = existingUsers.data.some((user) => user.email === email)
+        if (emailExists) {
+          return ResponseHelper.error(res, "El email ya está registrado", 409)
+        }
+      }
+
+      // Hash password
+      const hashedPassword = await bcrypt.hash(password, 12)
+
+      const usuarioData = {
         email,
-        password,
+        password: hashedPassword,
         rol: rol || "usuario",
-      })
+      }
 
-      const usuarioRespuesta = await Usuario.findByPk(usuario.id, {
-        attributes: { exclude: ["password"] },
-      })
+      const usuario = await usuarioService.create(usuarioData)
 
-      res.status(201).json({
-        success: true,
-        message: "Usuario creado exitosamente",
-        data: usuarioRespuesta,
-      })
+      // Remover password de la respuesta
+      const { password: _, ...usuarioRespuesta } = usuario
+
+      return ResponseHelper.created(res, usuarioRespuesta, "Usuario creado exitosamente")
     } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: "Error al crear usuario",
-        error: error.message,
-      })
+      return ResponseHelper.error(res, "Error al crear usuario", 400, error.message)
     }
   }
 
@@ -118,74 +92,38 @@ class UsuarioManager {
       const { id } = req.params
       const { email, password, rol, activo } = req.body
 
-      const usuario = await Usuario.findByPk(id)
-      if (!usuario) {
-        return res.status(404).json({
-          success: false,
-          message: "Usuario no encontrado",
-        })
+      const updateData = { email, rol, activo }
+
+      // Hash nueva password si se proporciona
+      if (password) {
+        updateData.password = await bcrypt.hash(password, 12)
       }
 
-      // Verificar si el nuevo email ya existe (si se está cambiando)
-      if (email && email !== usuario.email) {
-        const emailExistente = await Usuario.findOne({ where: { email } })
-        if (emailExistente) {
-          return res.status(400).json({
-            success: false,
-            message: "El email ya está registrado",
-          })
-        }
-      }
+      const usuario = await usuarioService.update(id, updateData)
 
-      await usuario.update({
-        email: email || usuario.email,
-        password: password || usuario.password,
-        rol: rol || usuario.rol,
-        activo: activo !== undefined ? activo : usuario.activo,
-      })
+      // Remover password de la respuesta
+      const { password: _, ...usuarioRespuesta } = usuario
 
-      const usuarioActualizado = await Usuario.findByPk(id, {
-        attributes: { exclude: ["password"] },
-      })
-
-      res.json({
-        success: true,
-        message: "Usuario actualizado exitosamente",
-        data: usuarioActualizado,
-      })
+      return ResponseHelper.success(res, usuarioRespuesta, "Usuario actualizado exitosamente")
     } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: "Error al actualizar usuario",
-        error: error.message,
-      })
+      if (error.status === 404) {
+        return ResponseHelper.notFound(res, "Usuario no encontrado")
+      }
+      return ResponseHelper.error(res, "Error al actualizar usuario", 400, error.message)
     }
   }
 
   static async eliminar(req, res) {
     try {
       const { id } = req.params
-      const usuario = await Usuario.findByPk(id)
+      await usuarioService.delete(id)
 
-      if (!usuario) {
-        return res.status(404).json({
-          success: false,
-          message: "Usuario no encontrado",
-        })
-      }
-
-      await usuario.destroy()
-
-      res.json({
-        success: true,
-        message: "Usuario eliminado exitosamente",
-      })
+      return ResponseHelper.success(res, null, "Usuario eliminado exitosamente")
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Error al eliminar usuario",
-        error: error.message,
-      })
+      if (error.status === 404) {
+        return ResponseHelper.notFound(res, "Usuario no encontrado")
+      }
+      return ResponseHelper.error(res, "Error al eliminar usuario", 500, error.message)
     }
   }
 
@@ -193,31 +131,38 @@ class UsuarioManager {
     try {
       const { email, password } = req.body
 
+      if (!email || !password) {
+        return ResponseHelper.badRequest(res, "Email y password son requeridos")
+      }
+
       // Buscar usuario por email
-      const usuario = await Usuario.findOne({
-        where: { email, activo: true },
-        include: [
-          {
-            model: Persona,
-            as: "persona",
-          },
-        ],
-      })
+      let usuario = null
+      if (process.env.USE_DATABASE === "true") {
+        // Lógica para base de datos
+        const { Usuario } = require("../models")
+        usuario = await Usuario.findOne({
+          where: { email, activo: true },
+          include: [{ model: require("../models").Persona, as: "persona" }],
+        })
+      } else {
+        // Lógica para JSON
+        const allUsers = await usuarioService.findAll({ limit: 1000 })
+        usuario = allUsers.data.find((u) => u.email === email && u.activo !== false)
+
+        if (usuario) {
+          // Simular relación con persona
+          usuario = await usuarioService.findById(usuario.id, ["persona"])
+        }
+      }
 
       if (!usuario) {
-        return res.status(401).json({
-          success: false,
-          message: "Credenciales inválidas",
-        })
+        return ResponseHelper.unauthorized(res, "Credenciales inválidas")
       }
 
       // Verificar contraseña
-      const passwordValida = await usuario.validarPassword(password)
+      const passwordValida = await bcrypt.compare(password, usuario.password)
       if (!passwordValida) {
-        return res.status(401).json({
-          success: false,
-          message: "Credenciales inválidas",
-        })
+        return ResponseHelper.unauthorized(res, "Credenciales inválidas")
       }
 
       // Generar JWT
@@ -227,14 +172,13 @@ class UsuarioManager {
           email: usuario.email,
           rol: usuario.rol,
         },
-        process.env.JWT_SECRET,
-        { expiresIn: process.env.JWT_EXPIRES_IN },
+        process.env.JWT_SECRET || "default-secret",
+        { expiresIn: process.env.JWT_EXPIRES_IN || "24h" },
       )
 
-      res.json({
-        success: true,
-        message: "Login exitoso",
-        data: {
+      return ResponseHelper.success(
+        res,
+        {
           token,
           usuario: {
             id: usuario.id,
@@ -243,13 +187,10 @@ class UsuarioManager {
             persona: usuario.persona,
           },
         },
-      })
+        "Login exitoso",
+      )
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Error en el login",
-        error: error.message,
-      })
+      return ResponseHelper.error(res, "Error en el login", 500, error.message)
     }
   }
 }

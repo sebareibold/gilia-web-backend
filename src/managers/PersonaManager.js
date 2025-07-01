@@ -1,89 +1,39 @@
-const { Persona, Usuario, Publicacion } = require("../models")
+const BaseService = require("../services/BaseService")
+const RepositoryFactory = require("../repositories/RepositoryFactory")
+const ResponseHelper = require("../utils/responseHelper")
+
+// Crear el servicio usando el factory
+const { Persona } = require("../models")
+const personaRepository = RepositoryFactory.create("personas", Persona)
+const personaService = new BaseService(personaRepository)
 
 class PersonaManager {
   static async obtenerTodos(req, res) {
     try {
-      const { page = 1, limit = 10, especialidad } = req.query
-      const offset = (page - 1) * limit
+      const result = await personaService.findAll(req.query)
 
-      const whereClause = {}
-      if (especialidad) {
-        whereClause.especialidades = {
-          [require("sequelize").Op.contains]: [especialidad],
-        }
-      }
-
-      const personas = await Persona.findAndCountAll({
-        where: whereClause,
-        include: [
-          {
-            model: Usuario,
-            as: "usuario",
-            attributes: { exclude: ["password"] },
-          },
-          {
-            model: Publicacion,
-            as: "publicaciones",
-          },
-        ],
-        limit: Number.parseInt(limit),
-        offset: Number.parseInt(offset),
-        order: [["created_at", "DESC"]],
-      })
-
-      res.json({
-        success: true,
-        data: personas.rows,
-        pagination: {
-          total: personas.count,
-          page: Number.parseInt(page),
-          limit: Number.parseInt(limit),
-          totalPages: Math.ceil(personas.count / limit),
-        },
-      })
+      return ResponseHelper.successWithPagination(
+        res,
+        result.data,
+        result.pagination,
+        "Personas obtenidas exitosamente",
+      )
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Error al obtener personas",
-        error: error.message,
-      })
+      return ResponseHelper.error(res, "Error al obtener personas", 500, error.message)
     }
   }
 
   static async obtenerPorId(req, res) {
     try {
       const { id } = req.params
-      const persona = await Persona.findByPk(id, {
-        include: [
-          {
-            model: Usuario,
-            as: "usuario",
-            attributes: { exclude: ["password"] },
-          },
-          {
-            model: Publicacion,
-            as: "publicaciones",
-          },
-        ],
-      })
+      const persona = await personaService.findById(id, ["usuario", "publicaciones"])
 
-      if (!persona) {
-        return res.status(404).json({
-          success: false,
-          message: "Persona no encontrada",
-        })
-      }
-
-      res.json({
-        success: true,
-        data: persona,
-      })
+      return ResponseHelper.success(res, persona, "Persona encontrada")
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Error al obtener persona",
-        error: error.message,
-      })
+      if (error.status === 404) {
+        return ResponseHelper.notFound(res, "Persona no encontrada")
+      }
+      return ResponseHelper.error(res, "Error al obtener persona", 500, error.message)
     }
   }
 
@@ -91,7 +41,7 @@ class PersonaManager {
     try {
       const { nombre, apellido, email_contacto, link_linkedin, link_github, especialidades, usuario_id } = req.body
 
-      const persona = await Persona.create({
+      const personaData = {
         nombre,
         apellido,
         email_contacto,
@@ -99,103 +49,43 @@ class PersonaManager {
         link_github,
         especialidades: especialidades || [],
         usuario_id,
-      })
+      }
 
-      const personaCompleta = await Persona.findByPk(persona.id, {
-        include: [
-          {
-            model: Usuario,
-            as: "usuario",
-            attributes: { exclude: ["password"] },
-          },
-        ],
-      })
+      const persona = await personaService.create(personaData)
 
-      res.status(201).json({
-        success: true,
-        message: "Persona creada exitosamente",
-        data: personaCompleta,
-      })
+      return ResponseHelper.created(res, persona, "Persona creada exitosamente")
     } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: "Error al crear persona",
-        error: error.message,
-      })
+      return ResponseHelper.error(res, "Error al crear persona", 400, error.message)
     }
   }
 
   static async actualizar(req, res) {
     try {
       const { id } = req.params
-      const { nombre, apellido, email_contacto, link_linkedin, link_github, especialidades, usuario_id } = req.body
+      const updateData = req.body
 
-      const persona = await Persona.findByPk(id)
-      if (!persona) {
-        return res.status(404).json({
-          success: false,
-          message: "Persona no encontrada",
-        })
-      }
+      const persona = await personaService.update(id, updateData)
 
-      await persona.update({
-        nombre: nombre || persona.nombre,
-        apellido: apellido || persona.apellido,
-        email_contacto: email_contacto || persona.email_contacto,
-        link_linkedin: link_linkedin || persona.link_linkedin,
-        link_github: link_github || persona.link_github,
-        especialidades: especialidades || persona.especialidades,
-        usuario_id: usuario_id || persona.usuario_id,
-      })
-
-      const personaActualizada = await Persona.findByPk(id, {
-        include: [
-          {
-            model: Usuario,
-            as: "usuario",
-            attributes: { exclude: ["password"] },
-          },
-        ],
-      })
-
-      res.json({
-        success: true,
-        message: "Persona actualizada exitosamente",
-        data: personaActualizada,
-      })
+      return ResponseHelper.success(res, persona, "Persona actualizada exitosamente")
     } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: "Error al actualizar persona",
-        error: error.message,
-      })
+      if (error.status === 404) {
+        return ResponseHelper.notFound(res, "Persona no encontrada")
+      }
+      return ResponseHelper.error(res, "Error al actualizar persona", 400, error.message)
     }
   }
 
   static async eliminar(req, res) {
     try {
       const { id } = req.params
-      const persona = await Persona.findByPk(id)
+      await personaService.delete(id)
 
-      if (!persona) {
-        return res.status(404).json({
-          success: false,
-          message: "Persona no encontrada",
-        })
-      }
-
-      await persona.destroy()
-
-      res.json({
-        success: true,
-        message: "Persona eliminada exitosamente",
-      })
+      return ResponseHelper.success(res, null, "Persona eliminada exitosamente")
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Error al eliminar persona",
-        error: error.message,
-      })
+      if (error.status === 404) {
+        return ResponseHelper.notFound(res, "Persona no encontrada")
+      }
+      return ResponseHelper.error(res, "Error al eliminar persona", 500, error.message)
     }
   }
 }

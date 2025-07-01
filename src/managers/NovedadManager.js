@@ -1,62 +1,40 @@
+const BaseService = require("../services/BaseService")
+const RepositoryFactory = require("../repositories/RepositoryFactory")
+const ResponseHelper = require("../utils/responseHelper")
+const { validateRequest } = require("../middleware/validation")
+
+// Crear el servicio usando el factory
 const { Novedad } = require("../models")
+const novedadRepository = RepositoryFactory.create("novedades", Novedad)
+const novedadService = new BaseService(novedadRepository)
 
 class NovedadManager {
   static async obtenerTodos(req, res) {
     try {
-      const { page = 1, limit = 10, activo } = req.query
-      const offset = (page - 1) * limit
+      const result = await novedadService.findAll(req.query)
 
-      const whereClause = {}
-      if (activo !== undefined) whereClause.activo = activo === "true"
-
-      const novedades = await Novedad.findAndCountAll({
-        where: whereClause,
-        limit: Number.parseInt(limit),
-        offset: Number.parseInt(offset),
-        order: [["fecha_publicacion", "DESC"]],
-      })
-
-      res.json({
-        success: true,
-        data: novedades.rows,
-        pagination: {
-          total: novedades.count,
-          page: Number.parseInt(page),
-          limit: Number.parseInt(limit),
-          totalPages: Math.ceil(novedades.count / limit),
-        },
-      })
+      return ResponseHelper.successWithPagination(
+        res,
+        result.data,
+        result.pagination,
+        "Novedades obtenidas exitosamente",
+      )
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Error al obtener novedades",
-        error: error.message,
-      })
+      return ResponseHelper.error(res, "Error al obtener novedades", 500, error.message)
     }
   }
 
   static async obtenerPorId(req, res) {
     try {
       const { id } = req.params
-      const novedad = await Novedad.findByPk(id)
+      const novedad = await novedadService.findById(id)
 
-      if (!novedad) {
-        return res.status(404).json({
-          success: false,
-          message: "Novedad no encontrada",
-        })
-      }
-
-      res.json({
-        success: true,
-        data: novedad,
-      })
+      return ResponseHelper.success(res, novedad, "Novedad encontrada")
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Error al obtener novedad",
-        error: error.message,
-      })
+      if (error.status === 404) {
+        return ResponseHelper.notFound(res, "Novedad no encontrada")
+      }
+      return ResponseHelper.error(res, "Error al obtener novedad", 500, error.message)
     }
   }
 
@@ -64,88 +42,49 @@ class NovedadManager {
     try {
       const { titulo, descripcion, link, imagen, fecha_publicacion } = req.body
 
-      const novedad = await Novedad.create({
+      const novedadData = {
         titulo,
         descripcion,
         link,
         imagen,
-        fecha_publicacion: fecha_publicacion || new Date(),
-      })
+        fecha_publicacion: fecha_publicacion || new Date().toISOString(),
+      }
 
-      res.status(201).json({
-        success: true,
-        message: "Novedad creada exitosamente",
-        data: novedad,
-      })
+      const novedad = await novedadService.create(novedadData)
+
+      return ResponseHelper.created(res, novedad, "Novedad creada exitosamente")
     } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: "Error al crear novedad",
-        error: error.message,
-      })
+      return ResponseHelper.error(res, "Error al crear novedad", 400, error.message)
     }
   }
 
   static async actualizar(req, res) {
     try {
       const { id } = req.params
-      const { titulo, descripcion, link, imagen, fecha_publicacion, activo } = req.body
+      const updateData = req.body
 
-      const novedad = await Novedad.findByPk(id)
-      if (!novedad) {
-        return res.status(404).json({
-          success: false,
-          message: "Novedad no encontrada",
-        })
-      }
+      const novedad = await novedadService.update(id, updateData)
 
-      await novedad.update({
-        titulo: titulo || novedad.titulo,
-        descripcion: descripcion || novedad.descripcion,
-        link: link || novedad.link,
-        imagen: imagen || novedad.imagen,
-        fecha_publicacion: fecha_publicacion || novedad.fecha_publicacion,
-        activo: activo !== undefined ? activo : novedad.activo,
-      })
-
-      res.json({
-        success: true,
-        message: "Novedad actualizada exitosamente",
-        data: novedad,
-      })
+      return ResponseHelper.success(res, novedad, "Novedad actualizada exitosamente")
     } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: "Error al actualizar novedad",
-        error: error.message,
-      })
+      if (error.status === 404) {
+        return ResponseHelper.notFound(res, "Novedad no encontrada")
+      }
+      return ResponseHelper.error(res, "Error al actualizar novedad", 400, error.message)
     }
   }
 
   static async eliminar(req, res) {
     try {
       const { id } = req.params
-      const novedad = await Novedad.findByPk(id)
+      await novedadService.delete(id)
 
-      if (!novedad) {
-        return res.status(404).json({
-          success: false,
-          message: "Novedad no encontrada",
-        })
-      }
-
-      await novedad.destroy()
-
-      res.json({
-        success: true,
-        message: "Novedad eliminada exitosamente",
-      })
+      return ResponseHelper.success(res, null, "Novedad eliminada exitosamente")
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Error al eliminar novedad",
-        error: error.message,
-      })
+      if (error.status === 404) {
+        return ResponseHelper.notFound(res, "Novedad no encontrada")
+      }
+      return ResponseHelper.error(res, "Error al eliminar novedad", 500, error.message)
     }
   }
 }
