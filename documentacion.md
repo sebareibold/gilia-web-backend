@@ -13,8 +13,6 @@ classDiagram
         +String password
         +String rol
         +Boolean activo
-        +Date created_at
-        +Date updated_at
         +validarPassword(password) Boolean
     }
 
@@ -27,8 +25,7 @@ classDiagram
         +String link_github
         +Array~String~ especialidades
         +Integer usuario_id
-        +Date created_at
-        +Date updated_at
+
     }
 
     class Investigacion {
@@ -38,8 +35,7 @@ classDiagram
         +String link
         +String imagen
         +Boolean activo
-        +Date created_at
-        +Date updated_at
+
     }
 
     class LineaInvestigacion {
@@ -48,8 +44,7 @@ classDiagram
         +String descripcion
         +Array~String~ imagenes
         +Boolean activo
-        +Date created_at
-        +Date updated_at
+
     }
 
     class Publicacion {
@@ -60,8 +55,6 @@ classDiagram
         +Array~String~ links
         +String informacion
         +Integer persona_id
-        +Date created_at
-        +Date updated_at
     }
 
     class Proyecto {
@@ -70,8 +63,6 @@ classDiagram
         +String descripcion
         +Date fecha
         +Boolean activo
-        +Date created_at
-        +Date updated_at
     }
 
     class Extension {
@@ -81,8 +72,6 @@ classDiagram
         +String link
         +String imagen
         +Boolean activo
-        +Date created_at
-        +Date updated_at
     }
 
     class LineaExtension {
@@ -91,8 +80,6 @@ classDiagram
         +String descripcion
         +Array~String~ imagenes
         +Boolean activo
-        +Date created_at
-        +Date updated_at
     }
 
     class Novedad {
@@ -103,8 +90,6 @@ classDiagram
         +String imagen
         +Date fecha_publicacion
         +Boolean activo
-        +Date created_at
-        +Date updated_at
     }
 
     class Objetivo {
@@ -114,8 +99,7 @@ classDiagram
         +String icono
         +Integer orden
         +Boolean activo
-        +Date created_at
-        +Date updated_at
+
     }
 
     class SeccionGaleria {
@@ -125,13 +109,18 @@ classDiagram
         +Array~String~ fotos
         +Integer orden
         +Boolean activo
-        +Date created_at
-        +Date updated_at
     }
 
-    %% Relaciones del Dominio
-    Usuario ||--o| Persona : "tiene"
-    Persona ||--o{ Publicacion : "publica"
+    %% Relaciones principales (basadas en la imagen)
+    Novedad <|-- Investigacion
+    Novedad <|-- Extension
+    Persona <|-- Usuario
+    Investigacion "1" o-- "*" "Linea de Investigacion" : contiene
+    Extension "1" o-- "*" "Lineas de Extension" : contiene
+    "Linea de Investigacion" "1" o-- "*" Publicacion : genera
+    "Lineas de Extension" "1" o-- "*" Proyecto : desarrolla
+    Publicacion "*" o-- "*" Persona : autor
+    Proyecto "*" o-- "*" Persona : participa
 ```
 
 ### 2. Diagrama de Clases de Contenido Dinámico
@@ -356,7 +345,7 @@ sequenceDiagram
 
     Client->>Routes: HTTP Request
     Routes->>Manager: Route Handler
-    
+
     alt Authentication Required
         Manager->>Manager: Validate JWT Token
         alt Invalid Token
@@ -371,7 +360,7 @@ sequenceDiagram
 
     Manager->>Service: Business Logic Call
     Service->>Repository: Data Operation
-    
+
     alt JSON Mode
         Repository->>Storage: Read/Write JSON File
         Storage-->>Repository: Data
@@ -391,19 +380,19 @@ sequenceDiagram
 ```mermaid
 stateDiagram-v2
     [*] --> Unauthenticated
-    
+
     Unauthenticated --> Authenticating : POST /login
     Authenticating --> Authenticated : Valid Credentials
     Authenticating --> Unauthenticated : Invalid Credentials
-    
+
     Authenticated --> Authorized : Valid Token + Permissions
     Authenticated --> Unauthenticated : Token Expired
     Authenticated --> Unauthorized : Valid Token + No Permissions
-    
+
     Authorized --> [*] : Logout
     Unauthorized --> [*] : Logout
     Unauthenticated --> [*] : Session End
-    
+
     state Authenticating {
         [*] --> ValidatingCredentials
         ValidatingCredentials --> CheckingPassword
@@ -411,7 +400,7 @@ stateDiagram-v2
         CheckingPassword --> [*] : Password Invalid
         GeneratingToken --> [*]
     }
-    
+
     state Authorized {
         [*] --> CanRead
         [*] --> CanWrite : Admin/Editor Role
@@ -504,18 +493,18 @@ graph TB
     %% Entorno de Producción
     subgraph "Production Environment"
         LOAD_BALANCER[Load Balancer\nnginx/Apache]
-        
+
         subgraph "Application Servers"
             APP1[App Server 1\nNode.js + Express]
             APP2[App Server 2\nNode.js + Express]
             APP3[App Server N\nNode.js + Express]
         end
-        
+
         subgraph "Database Cluster"
             MASTER_DB[(Master PostgreSQL)]
             REPLICA_DB[(Replica PostgreSQL)]
         end
-        
+
         subgraph "Monitoring & Logging"
             MONITOR[Monitoring\nPrometheus/Grafana]
             LOGS[Centralized Logging\nELK Stack]
