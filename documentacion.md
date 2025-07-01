@@ -198,48 +198,6 @@ classDiagram
         +Date created_at
         +Date updated_at
     }
-
-    class HomePageComponent {
-        +renderHero()
-        +renderObjectives()
-        +renderFloatingCards()
-        +renderLatestNews()
-    }
-
-    class PresentationPageComponent {
-        +renderIntroduction()
-        +renderMission()
-        +renderVision()
-        +renderActionButtons()
-    }
-
-    class NewsPageComponent {
-        +renderNewsList()
-        +renderFilters()
-        +renderPagination()
-        +renderMagicWords()
-    }
-
-    class PublicationsPageComponent {
-        +renderPublicationsList()
-        +renderCategoryFilter()
-        +renderAuthorFilter()
-        +renderDateFilter()
-    }
-
-    class TeamPageComponent {
-        +renderTeamMembers()
-        +renderMemberDetails()
-        +renderSpecialties()
-        +renderContactInfo()
-    }
-
-    class GalleryPageComponent {
-        +renderGallerySections()
-        +renderImageGrid()
-        +renderImageModal()
-        +renderSectionNavigation()
-    }
 ```
 
 ### 3. Diagrama de Arquitectura del Sistema
