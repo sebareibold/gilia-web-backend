@@ -27,7 +27,7 @@ Este proyecto proporciona una API RESTful completa para gestionar el contenido d
 
 1. **Clonar el repositorio**
    ```shell
-   git clone <repository-url>
+   git clone https://github.com/sebareibold/gilia-web-backend.git
    cd gilia-web-backend
    ```
 
