@@ -35,5 +35,14 @@ module.exports = (sequelize) => {
     },
   )
 
+  LineaInvestigacion.associate = (models) => {
+    LineaInvestigacion.belongsToMany(models.Novedad, {
+      through: 'NovedadLineaInvestigacion',
+      as: 'novedades',
+      foreignKey: 'linea_investigacion_id',
+      otherKey: 'novedad_id',
+    });
+  };
+
   return LineaInvestigacion
 }

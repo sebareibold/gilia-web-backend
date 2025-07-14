@@ -1,21 +1,131 @@
 {
-  "novedades": [],
-  "investigaciones": [],
-  "lineas_investigacion": [],
-  "publicaciones": [],
-  "personas": [],
-  "proyectos": [],
-  "extensiones": [],
-  "lineas_extension": [],
-  "usuarios": [],
-  "objetivos": [],
-  "secciones_galeria": [],
-  "contenido_home": [],
-  "contenido_presentacion": [],
-  "tarjetas_flotantes": [],
-  "contenido_novedades": [],
-  "contenido_publicaciones": [],
-  "contenido_equipo": [],
-  "contenido_galeria": [],
-  "contenido_extension": []
+  "novedades": [
+    { "id": 1, "titulo": "Nueva App Científica", "descripcion": "Lanzamiento de la nueva app para gestión de proyectos.", "link": "https://ejemplo.com/app", "imagen": "app.png", "fecha_publicacion": "2024-06-01T00:00:00Z", "activo": true, "lineas_investigacion_ids": [1], "lineas_extension_ids": [1, 2] },
+    { "id": 2, "titulo": "Premio Nacional", "descripcion": "El equipo ganó el premio nacional de innovación.", "link": "https://ejemplo.com/premio", "imagen": "premio.png", "fecha_publicacion": "2024-05-15T00:00:00Z", "activo": true, "lineas_investigacion_ids": [2], "lineas_extension_ids": [2] },
+    { "id": 3, "titulo": "Conferencia Internacional", "descripcion": "Participación en congreso internacional.", "link": "https://ejemplo.com/congreso", "imagen": "congreso.png", "fecha_publicacion": "2024-04-10T00:00:00Z", "activo": true, "lineas_investigacion_ids": [1,2], "lineas_extension_ids": [1] },
+    { "id": 4, "titulo": "Nuevo Laboratorio", "descripcion": "Inauguración del laboratorio de robótica avanzada.", "link": "https://ejemplo.com/lab", "imagen": "lab.png", "fecha_publicacion": "2024-03-20T00:00:00Z", "activo": true, "lineas_investigacion_ids": [2,3], "lineas_extension_ids": [3] },
+    { "id": 5, "titulo": "Colaboración Internacional", "descripcion": "Acuerdo con universidad extranjera.", "link": "https://ejemplo.com/colab", "imagen": "colab.png", "fecha_publicacion": "2024-02-28T00:00:00Z", "activo": true, "lineas_investigacion_ids": [1,3], "lineas_extension_ids": [1,3] },
+    { "id": 6, "titulo": "Premio a la Innovación", "descripcion": "Reconocimiento nacional por innovación en bioinformática.", "link": "https://ejemplo.com/innovacion", "imagen": "innovacion.png", "fecha_publicacion": "2024-01-15T00:00:00Z", "activo": true, "lineas_investigacion_ids": [3], "lineas_extension_ids": [2,3] },
+    { "id": 7, "titulo": "Taller de Divulgación", "descripcion": "Taller abierto a la comunidad.", "link": "https://ejemplo.com/taller", "imagen": "taller.png", "fecha_publicacion": "2023-12-10T00:00:00Z", "activo": true, "lineas_investigacion_ids": [1], "lineas_extension_ids": [1] },
+    { "id": 8, "titulo": "Nueva Publicación", "descripcion": "Artículo publicado en revista internacional.", "link": "https://ejemplo.com/publicacion", "imagen": "publicacion.png", "fecha_publicacion": "2023-11-05T00:00:00Z", "activo": true, "lineas_investigacion_ids": [2], "lineas_extension_ids": [2] },
+    { "id": 9, "titulo": "Visita Escolar", "descripcion": "Visita de estudiantes de secundaria.", "link": "https://ejemplo.com/visita", "imagen": "visita.png", "fecha_publicacion": "2023-10-22T00:00:00Z", "activo": true, "lineas_investigacion_ids": [3], "lineas_extension_ids": [3] },
+    { "id": 10, "titulo": "Hackathon", "descripcion": "Competencia de programación para jóvenes.", "link": "https://ejemplo.com/hackathon", "imagen": "hackathon.png", "fecha_publicacion": "2023-09-30T00:00:00Z", "activo": true, "lineas_investigacion_ids": [1,2,3], "lineas_extension_ids": [1,2,3] },
+    { "id": 11, "titulo": "Expo Ciencia", "descripcion": "Exposición de proyectos científicos.", "link": "https://ejemplo.com/expo", "imagen": "expo.png", "fecha_publicacion": "2023-08-15T00:00:00Z", "activo": true, "lineas_investigacion_ids": [4], "lineas_extension_ids": [4] },
+    { "id": 12, "titulo": "Jornada de Puertas Abiertas", "descripcion": "Evento para la comunidad.", "link": "https://ejemplo.com/jornada", "imagen": "jornada.png", "fecha_publicacion": "2023-07-10T00:00:00Z", "activo": true, "lineas_investigacion_ids": [5], "lineas_extension_ids": [5] },
+    { "id": 13, "titulo": "Seminario de Big Data", "descripcion": "Seminario sobre análisis de datos.", "link": "https://ejemplo.com/bigdata", "imagen": "bigdata.png", "fecha_publicacion": "2023-06-05T00:00:00Z", "activo": true, "lineas_investigacion_ids": [4,5], "lineas_extension_ids": [2,4] },
+    { "id": 14, "titulo": "Campamento STEM", "descripcion": "Campamento de verano para jóvenes.", "link": "https://ejemplo.com/campamento", "imagen": "campamento.png", "fecha_publicacion": "2023-05-01T00:00:00Z", "activo": true, "lineas_investigacion_ids": [2,4], "lineas_extension_ids": [2,3,5] },
+    { "id": 15, "titulo": "Foro de Innovación", "descripcion": "Foro anual de innovación tecnológica.", "link": "https://ejemplo.com/foro", "imagen": "foro.png", "fecha_publicacion": "2023-04-10T00:00:00Z", "activo": true, "lineas_investigacion_ids": [1,5], "lineas_extension_ids": [1,5] },
+    { "id": 16, "titulo": "Simposio Internacional", "descripcion": "Simposio con expertos internacionales.", "link": "https://ejemplo.com/simposio", "imagen": "simposio.png", "fecha_publicacion": "2023-03-15T00:00:00Z", "activo": true, "lineas_investigacion_ids": [3,4], "lineas_extension_ids": [3,4] },
+    { "id": 17, "titulo": "Torneo de Robótica", "descripcion": "Competencia de robótica para estudiantes.", "link": "https://ejemplo.com/torneo", "imagen": "torneo.png", "fecha_publicacion": "2023-02-20T00:00:00Z", "activo": true, "lineas_investigacion_ids": [2], "lineas_extension_ids": [3] },
+    { "id": 18, "titulo": "Mesa Redonda de Bioinformática", "descripcion": "Debate sobre avances en bioinformática.", "link": "https://ejemplo.com/mesa", "imagen": "mesa.png", "fecha_publicacion": "2023-01-25T00:00:00Z", "activo": true, "lineas_investigacion_ids": [3,5], "lineas_extension_ids": [4,5] },
+    { "id": 19, "titulo": "Ciclo de Charlas", "descripcion": "Charlas mensuales sobre ciencia.", "link": "https://ejemplo.com/charlas", "imagen": "charlas.png", "fecha_publicacion": "2022-12-10T00:00:00Z", "activo": true, "lineas_investigacion_ids": [1,4], "lineas_extension_ids": [1,2,4] },
+    { "id": 20, "titulo": "Premio Regional", "descripcion": "Premio regional a la excelencia científica.", "link": "https://ejemplo.com/regional", "imagen": "regional.png", "fecha_publicacion": "2022-11-05T00:00:00Z", "activo": true, "lineas_investigacion_ids": [5], "lineas_extension_ids": [5] }
+  ],
+  "investigaciones": [
+    { "id": 1, "nombre": "Estudio de IA", "descripcion": "Investigación sobre IA aplicada a la salud.", "activo": true },
+    { "id": 2, "nombre": "Robótica Educativa", "descripcion": "Robots en el aula.", "activo": true },
+    { "id": 3, "nombre": "Genómica Computacional", "descripcion": "Estudio de genómica y bioinformática.", "activo": true },
+    { "id": 4, "nombre": "Sensores Inteligentes", "descripcion": "Desarrollo de sensores para monitoreo ambiental.", "activo": true },
+    { "id": 5, "nombre": "Redes Neuronales", "descripcion": "Aplicaciones de redes neuronales profundas.", "activo": true }
+  ],
+  "lineas_investigacion": [
+    { "id": 1, "titulo": "IA en Salud", "descripcion": "Aplicaciones de IA en medicina.", "imagenes": ["ia1.png"], "activo": true },
+    { "id": 2, "titulo": "Robótica", "descripcion": "Robots para la industria.", "imagenes": ["robot.png"], "activo": true },
+    { "id": 3, "titulo": "Bioinformática", "descripcion": "Análisis de datos biológicos.", "imagenes": ["bioinfo.png"], "activo": true },
+    { "id": 4, "titulo": "Ciencias de Datos", "descripcion": "Big Data y análisis predictivo.", "imagenes": ["datos.png"], "activo": true },
+    { "id": 5, "titulo": "Ingeniería Biomédica", "descripcion": "Tecnología para la salud.", "imagenes": ["biomed.png"], "activo": true }
+  ],
+  "publicaciones": [
+    { "id": 1, "titulo": "Artículo IA", "categoria": "Científica", "fecha": "2024-03-01T00:00:00Z", "links": ["https://ejemplo.com/articulo-ia"], "informacion": "Publicación sobre IA.", "persona_id": 1 },
+    { "id": 2, "titulo": "Robots en Educación", "categoria": "Divulgación", "fecha": "2024-02-15T00:00:00Z", "links": ["https://ejemplo.com/robots-edu"], "informacion": "Robots en el aula.", "persona_id": 2 },
+    { "id": 3, "titulo": "Genómica Computacional", "categoria": "Científica", "fecha": "2023-12-10T00:00:00Z", "links": ["https://ejemplo.com/genomica"], "informacion": "Estudio de genómica.", "persona_id": 3 },
+    { "id": 4, "titulo": "Big Data en Salud", "categoria": "Científica", "fecha": "2023-11-20T00:00:00Z", "links": ["https://ejemplo.com/bigdata"], "informacion": "Análisis de grandes volúmenes de datos médicos.", "persona_id": 4 },
+    { "id": 5, "titulo": "Redes Neuronales", "categoria": "Científica", "fecha": "2023-10-05T00:00:00Z", "links": ["https://ejemplo.com/redes"], "informacion": "Aplicaciones de redes neuronales.", "persona_id": 5 },
+    { "id": 6, "titulo": "Sensores Inteligentes", "categoria": "Tecnológica", "fecha": "2023-09-15T00:00:00Z", "links": ["https://ejemplo.com/sensores"], "informacion": "Desarrollo de sensores inteligentes.", "persona_id": 1 },
+    { "id": 7, "titulo": "Bioinformática Aplicada", "categoria": "Científica", "fecha": "2023-08-10T00:00:00Z", "links": ["https://ejemplo.com/bioinfo"], "informacion": "Aplicaciones de la bioinformática.", "persona_id": 3 },
+    { "id": 8, "titulo": "Educación STEM", "categoria": "Divulgación", "fecha": "2023-07-01T00:00:00Z", "links": ["https://ejemplo.com/stem"], "informacion": "Promoción de la educación STEM.", "persona_id": 2 },
+    { "id": 9, "titulo": "Premio Nacional", "categoria": "Reconocimiento", "fecha": "2023-06-15T00:00:00Z", "links": ["https://ejemplo.com/premio"], "informacion": "Premio nacional a la innovación.", "persona_id": 1 },
+    { "id": 10, "titulo": "Taller de Programación", "categoria": "Divulgación", "fecha": "2023-05-10T00:00:00Z", "links": ["https://ejemplo.com/taller"], "informacion": "Taller práctico de programación.", "persona_id": 2 }
+  ],
+  "personas": [
+    { "id": 1, "nombre": "Ana", "apellido": "García", "email_contacto": "ana@ejemplo.com", "especialidades": ["IA", "Salud"], "usuario_id": 1, "proyectos_ids": [1,3,5] },
+    { "id": 2, "nombre": "Luis", "apellido": "Pérez", "email_contacto": "luis@ejemplo.com", "especialidades": ["Robótica"], "usuario_id": 2, "proyectos_ids": [1, 2, 4] },
+    { "id": 3, "nombre": "María", "apellido": "López", "email_contacto": "maria@ejemplo.com", "especialidades": ["Bioinformática"], "usuario_id": 3, "proyectos_ids": [3,5] },
+    { "id": 4, "nombre": "Carlos", "apellido": "Sánchez", "email_contacto": "carlos@ejemplo.com", "especialidades": ["Big Data"], "usuario_id": 4, "proyectos_ids": [4] },
+    { "id": 5, "nombre": "Elena", "apellido": "Martínez", "email_contacto": "elena@ejemplo.com", "especialidades": ["Redes Neuronales"], "usuario_id": 5, "proyectos_ids": [2,4] }
+  ],
+  "proyectos": [
+    { "id": 1, "nombre": "Proyecto Alfa", "descripcion": "Desarrollo de sensores.", "fecha": "2024-01-01T00:00:00Z", "activo": true, "personas_ids": [1, 2] },
+    { "id": 2, "nombre": "Proyecto Beta", "descripcion": "Plataforma de datos.", "fecha": "2023-09-01T00:00:00Z", "activo": true, "personas_ids": [2,5] },
+    { "id": 3, "nombre": "Proyecto Gamma", "descripcion": "Análisis genómico.", "fecha": "2023-05-01T00:00:00Z", "activo": true, "personas_ids": [1,3] },
+    { "id": 4, "nombre": "Proyecto Delta", "descripcion": "Big Data en salud.", "fecha": "2023-03-01T00:00:00Z", "activo": true, "personas_ids": [2,4,5] },
+    { "id": 5, "nombre": "Proyecto Epsilon", "descripcion": "Redes neuronales aplicadas.", "fecha": "2022-12-01T00:00:00Z", "activo": true, "personas_ids": [1,3] }
+  ],
+  "extensiones": [
+    { "id": 1, "nombre": "Divulgación Científica", "descripcion": "Charlas y talleres.", "imagenes": ["charla.png"], "activo": true },
+    { "id": 2, "nombre": "Educación STEM", "descripcion": "Programas educativos.", "imagenes": ["stem.png"], "activo": true },
+    { "id": 3, "nombre": "Talleres de Programación", "descripcion": "Cursos prácticos.", "imagenes": ["taller.png"], "activo": true },
+    { "id": 4, "nombre": "Visitas Escolares", "descripcion": "Recorridos guiados para estudiantes.", "imagenes": ["visita.png"], "activo": true },
+    { "id": 5, "nombre": "Ferias Científicas", "descripcion": "Participación en ferias.", "imagenes": ["feria.png"], "activo": true }
+  ],
+  "lineas_extension": [
+    { "id": 1, "nombre": "Divulgación Científica", "descripcion": "Charlas y talleres.", "imagenes": ["charla.png"], "activo": true },
+    { "id": 2, "nombre": "Educación STEM", "descripcion": "Programas educativos.", "imagenes": ["stem.png"], "activo": true },
+    { "id": 3, "nombre": "Talleres de Programación", "descripcion": "Cursos prácticos.", "imagenes": ["taller.png"], "activo": true },
+    { "id": 4, "nombre": "Visitas Escolares", "descripcion": "Recorridos guiados para estudiantes.", "imagenes": ["visita.png"], "activo": true },
+    { "id": 5, "nombre": "Ferias Científicas", "descripcion": "Participación en ferias.", "imagenes": ["feria.png"], "activo": true }
+  ],
+  "usuarios": [
+    { "id": 1, "email": "ana@ejemplo.com", "password": "hashedpass1", "rol": "investigador", "activo": true },
+    { "id": 2, "email": "luis@ejemplo.com", "password": "hashedpass2", "rol": "investigador", "activo": true },
+    { "id": 3, "email": "maria@ejemplo.com", "password": "hashedpass3", "rol": "editor", "activo": true },
+    { "id": 4, "email": "carlos@ejemplo.com", "password": "hashedpass4", "rol": "editor", "activo": true },
+    { "id": 5, "email": "elena@ejemplo.com", "password": "hashedpass5", "rol": "investigador", "activo": true }
+  ],
+  "objetivos": [
+    { "id": 1, "titulo": "Difundir Ciencia", "descripcion": "Promover la ciencia en la sociedad.", "icono": "ciencia.png", "orden": 1, "activo": true },
+    { "id": 2, "titulo": "Formar Talento", "descripcion": "Capacitar a jóvenes.", "icono": "talento.png", "orden": 2, "activo": true },
+    { "id": 3, "titulo": "Innovar", "descripcion": "Fomentar la innovación tecnológica.", "icono": "innovar.png", "orden": 3, "activo": true },
+    { "id": 4, "titulo": "Colaborar", "descripcion": "Impulsar colaboraciones internacionales.", "icono": "colaborar.png", "orden": 4, "activo": true }
+  ],
+  "secciones_galeria": [
+    { "id": 1, "titulo": "Expo 2024", "descripcion": "Exposición anual.", "fotos": ["expo1.png", "expo2.png"], "orden": 1, "activo": true },
+    { "id": 2, "titulo": "Premios", "descripcion": "Premios obtenidos.", "fotos": ["premio1.png"], "orden": 2, "activo": true },
+    { "id": 3, "titulo": "Talleres", "descripcion": "Talleres realizados.", "fotos": ["taller1.png", "taller2.png"], "orden": 3, "activo": true },
+    { "id": 4, "titulo": "Visitas", "descripcion": "Visitas escolares.", "fotos": ["visita1.png"], "orden": 4, "activo": true }
+  ],
+  "contenido_home": [
+    { "id": 1, "titulo": "Bienvenidos", "descripcion": "Portal de ciencia y tecnología." },
+    { "id": 2, "titulo": "Explora", "descripcion": "Descubre nuestros proyectos y actividades." },
+    { "id": 3, "titulo": "Participa", "descripcion": "Súmate a nuestras iniciativas." }
+  ],
+  "contenido_presentacion": [
+    { "id": 1, "titulo": "Presentación", "descripcion": "Presentación institucional.", "texto_boton_1": "Ver más", "texto_boton_2": "Contacto" },
+    { "id": 2, "titulo": "Nuestra Misión", "descripcion": "Impulsar la ciencia en la región.", "texto_boton_1": "Misión", "texto_boton_2": "Visión" }
+  ],
+  "tarjetas_flotantes": [
+    { "id": 1, "titulo": "Impacto", "descripcion": "+1000 beneficiados." },
+    { "id": 2, "titulo": "Proyectos", "descripcion": "Más de 20 proyectos activos." },
+    { "id": 3, "titulo": "Colaboraciones", "descripcion": "Alianzas con 10 instituciones." }
+  ],
+  "contenido_novedades": [
+    { "id": 1, "titulo": "Nueva Web", "descripcion": "Lanzamiento del nuevo sitio web.", "palabras_magicas": ["web", "lanzamiento"] },
+    { "id": 2, "titulo": "Premio", "descripcion": "Premio nacional recibido.", "palabras_magicas": ["premio", "reconocimiento"] }
+  ],
+  "contenido_publicaciones": [
+    { "id": 1, "titulo": "Publicación Destacada", "descripcion": "Artículo destacado del mes." },
+    { "id": 2, "titulo": "Nueva Publicación", "descripcion": "Nuevo artículo en revista internacional." }
+  ],
+  "contenido_equipo": [
+    { "id": 1, "titulo": "Equipo Principal", "descripcion": "Equipo de investigación principal." },
+    { "id": 2, "titulo": "Equipo de Robótica", "descripcion": "Equipo especializado en robótica." }
+  ],
+  "contenido_galeria": [
+    { "id": 1, "titulo": "Galería 2024", "descripcion": "Fotos del año." },
+    { "id": 2, "titulo": "Galería Premios", "descripcion": "Imágenes de premiaciones." }
+  ],
+  "contenido_extension": [
+    { "id": 1, "titulo": "Extensión 2024", "descripcion": "Actividades de extensión." },
+    { "id": 2, "titulo": "Charlas STEM", "descripcion": "Charlas sobre ciencia y tecnología." }
+  ]
 } 

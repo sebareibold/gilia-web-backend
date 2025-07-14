@@ -34,5 +34,14 @@ module.exports = (sequelize) => {
     },
   )
 
+  Proyecto.associate = (models) => {
+    Proyecto.belongsToMany(models.Persona, {
+      through: 'PersonaProyecto',
+      as: 'personas',
+      foreignKey: 'proyecto_id',
+      otherKey: 'persona_id',
+    });
+  };
+
   return Proyecto
 }

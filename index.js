@@ -1,10 +1,13 @@
+console.log('INICIO index.js')
 const net = require("net")
 const app = require("./src/server")
 
+console.log('Después de importar app')
 // Solo importar sequelize si se va a usar base de datos
 let sequelize = null
 if (process.env.USE_DATABASE === "true") {
   sequelize = require("./src/models").sequelize
+  console.log('Sequelize importado')
 }
 
 // Función para encontrar un puerto disponible
@@ -65,15 +68,18 @@ const initializeDatabase = async () => {
 // Función para inicializar el servidor
 const initializeServer = async () => {
   try {
+    console.log('Antes de inicializar base de datos')
     // Inicializar almacenamiento
     await initializeDatabase()
 
+    console.log('Antes de obtener puerto')
     // Obtener puerto disponible
     const PORT = await getPort()
 
+    console.log('Antes de iniciar servidor HTTP')
     // Iniciar el servidor HTTP
     const server = app.listen(PORT, () => {
-      console.log("*".repeat(60))
+      console.log(":".repeat(60))
       console.log("🚀 ¡Servidor GILIA iniciado exitosamente!")
       console.log(`📡 Servidor: http://localhost:${PORT}/`)
       console.log(`⚕️  API Health Check: http://localhost:${PORT}/api/health`)
@@ -85,7 +91,7 @@ const initializeServer = async () => {
         console.log(`📄 Almacenamiento: JSON (src/database/db.json)`)
       }
 
-      console.log("*".repeat(60))
+      console.log(":".repeat(60))
     })
 
     // Manejo de cierre graceful
@@ -127,4 +133,6 @@ process.on("uncaughtException", (error) => {
 })
 
 // Inicia el proceso de inicialización
+console.log('Antes de initializeServer')
 initializeServer()
+console.log('Después de initializeServer')

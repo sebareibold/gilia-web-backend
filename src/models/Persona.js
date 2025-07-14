@@ -64,16 +64,22 @@ module.exports = (sequelize) => {
   )
 
   Persona.associate = (models) => {
+    Persona.belongsToMany(models.Proyecto, {
+      through: 'PersonaProyecto',
+      as: 'proyectos',
+      foreignKey: 'persona_id',
+      otherKey: 'proyecto_id',
+    });
+    // Asociaciones existentes
     Persona.belongsTo(models.Usuario, {
-      foreignKey: "usuario_id",
-      as: "usuario",
-    })
-
+      foreignKey: 'usuario_id',
+      as: 'usuario',
+    });
     Persona.hasMany(models.Publicacion, {
-      foreignKey: "persona_id",
-      as: "publicaciones",
-    })
-  }
+      foreignKey: 'persona_id',
+      as: 'publicaciones',
+    });
+  };
 
   return Persona
 }
