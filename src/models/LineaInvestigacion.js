@@ -25,7 +25,7 @@ module.exports = (sequelize) => {
         allowNull: true,
         defaultValue: [],
       },
-      activo: {
+      estado: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
@@ -41,6 +41,22 @@ module.exports = (sequelize) => {
       as: 'novedades',
       foreignKey: 'linea_investigacion_id',
       otherKey: 'novedad_id',
+    });
+    LineaInvestigacion.belongsToMany(models.Herramienta, {
+      through: 'HerramientaLineaInvestigacion',
+      as: 'herramientas',
+      foreignKey: 'linea_investigacion_id',
+      otherKey: 'herramienta_id',
+    });
+    LineaInvestigacion.hasMany(models.Publicacion, {
+      foreignKey: 'linea_investigacion_id',
+      as: 'publicaciones',
+    });
+    LineaInvestigacion.belongsToMany(models.Proyecto, {
+      through: 'LineaInvestigacionProyecto',
+      as: 'proyectos',
+      foreignKey: 'linea_investigacion_id',
+      otherKey: 'proyecto_id',
     });
   };
 

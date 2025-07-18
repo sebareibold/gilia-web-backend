@@ -1,157 +1,79 @@
 const { Publicacion, Persona } = require("../models")
+const ResponseHelper = require("../utils/responseHelper")
 
 class PublicacionManager {
   static async obtenerTodos(req, res) {
     try {
-      const { page = 1, limit = 10, categoria, persona_id } = req.query
+      const { page = 1, limit = 10 } = req.query
       const offset = (page - 1) * limit
-
-      const whereClause = {}
-      if (categoria) whereClause.categoria = categoria
-      if (persona_id) whereClause.persona_id = persona_id
-
       const publicaciones = await Publicacion.findAndCountAll({
-        where: whereClause,
-        include: [
-          {
-            model: Persona,
-            as: "persona",
-          },
-        ],
         limit: Number.parseInt(limit),
         offset: Number.parseInt(offset),
         order: [["fecha", "DESC"]],
       })
-
-      res.json({
-        success: true,
-        data: publicaciones.rows,
-        pagination: {
+      return ResponseHelper.successWithPagination(
+        res,
+        publicaciones.rows,
+        {
           total: publicaciones.count,
           page: Number.parseInt(page),
           limit: Number.parseInt(limit),
           totalPages: Math.ceil(publicaciones.count / limit),
         },
-      })
+        "Publicaciones obtenidas exitosamente"
+      )
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Error al obtener publicaciones",
-        error: error.message,
-      })
+      return ResponseHelper.error(res, "Error al obtener publicaciones", 500, error.message)
     }
   }
 
   static async obtenerPorId(req, res) {
     try {
       const { id } = req.params
-      const publicacion = await Publicacion.findByPk(id, {
-        include: [
-          {
-            model: Persona,
-            as: "persona",
-          },
-        ],
-      })
-
+      const publicacion = await Publicacion.findByPk(id)
       if (!publicacion) {
-        return res.status(404).json({
-          success: false,
-          message: "Publicación no encontrada",
-        })
+        return ResponseHelper.notFound(res, "Publicación no encontrada")
       }
-
-      res.json({
-        success: true,
-        data: publicacion,
-      })
+      return ResponseHelper.success(res, publicacion, "Publicación encontrada")
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Error al obtener publicación",
-        error: error.message,
-      })
+      return ResponseHelper.error(res, "Error al obtener publicación", 500, error.message)
     }
   }
 
   static async crear(req, res) {
     try {
-      const { titulo, categoria, fecha, links, informacion, persona_id } = req.body
-
+      const { titulo, fecha, informacion, link } = req.body
       const publicacion = await Publicacion.create({
         titulo,
-        categoria,
         fecha,
-        links: links || [],
         informacion,
-        persona_id,
+        link,
       })
-
-      const publicacionCompleta = await Publicacion.findByPk(publicacion.id, {
-        include: [
-          {
-            model: Persona,
-            as: "persona",
-          },
-        ],
-      })
-
-      res.status(201).json({
-        success: true,
-        message: "Publicación creada exitosamente",
-        data: publicacionCompleta,
-      })
+      const publicacionCompleta = await Publicacion.findByPk(publicacion.id)
+      return ResponseHelper.created(res, publicacionCompleta, "Publicación creada exitosamente")
     } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: "Error al crear publicación",
-        error: error.message,
-      })
+      return ResponseHelper.error(res, "Error al crear publicación", 400, error.message)
     }
   }
 
   static async actualizar(req, res) {
     try {
       const { id } = req.params
-      const { titulo, categoria, fecha, links, informacion, persona_id } = req.body
-
+      const { titulo, fecha, informacion, link } = req.body
       const publicacion = await Publicacion.findByPk(id)
       if (!publicacion) {
-        return res.status(404).json({
-          success: false,
-          message: "Publicación no encontrada",
-        })
+        return ResponseHelper.notFound(res, "Publicación no encontrada")
       }
-
       await publicacion.update({
         titulo: titulo || publicacion.titulo,
-        categoria: categoria || publicacion.categoria,
         fecha: fecha || publicacion.fecha,
-        links: links || publicacion.links,
         informacion: informacion || publicacion.informacion,
-        persona_id: persona_id || publicacion.persona_id,
+        link: link || publicacion.link,
       })
-
-      const publicacionActualizada = await Publicacion.findByPk(id, {
-        include: [
-          {
-            model: Persona,
-            as: "persona",
-          },
-        ],
-      })
-
-      res.json({
-        success: true,
-        message: "Publicación actualizada exitosamente",
-        data: publicacionActualizada,
-      })
+      const publicacionActualizada = await Publicacion.findByPk(id)
+      return ResponseHelper.success(res, publicacionActualizada, "Publicación actualizada exitosamente")
     } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: "Error al actualizar publicación",
-        error: error.message,
-      })
+      return ResponseHelper.error(res, "Error al actualizar publicación", 400, error.message)
     }
   }
 
@@ -159,26 +81,64 @@ class PublicacionManager {
     try {
       const { id } = req.params
       const publicacion = await Publicacion.findByPk(id)
-
       if (!publicacion) {
-        return res.status(404).json({
-          success: false,
-          message: "Publicación no encontrada",
-        })
+        return ResponseHelper.notFound(res, "Publicación no encontrada")
       }
-
       await publicacion.destroy()
-
-      res.json({
-        success: true,
-        message: "Publicación eliminada exitosamente",
-      })
+      return ResponseHelper.success(res, null, "Publicación eliminada exitosamente")
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Error al eliminar publicación",
-        error: error.message,
-      })
+      return ResponseHelper.error(res, "Error al eliminar publicación", 500, error.message)
+    }
+  }
+
+  static async obtenerPersonas(req, res) {
+    try {
+      const { id } = req.params;
+      const publicacion = await Publicacion.findByPk(id);
+      if (!publicacion) {
+        return ResponseHelper.notFound(res, "Publicación no encontrada")
+      }
+      const personas = await publicacion.getPersonas();
+      return ResponseHelper.success(res, personas, "Personas asociadas a la publicación")
+    } catch (error) {
+      return ResponseHelper.error(res, "Error al obtener personas", 500, error.message)
+    }
+  }
+
+  static async agregarPersona(req, res) {
+    try {
+      const { id } = req.params;
+      const { personaId } = req.body;
+      const publicacion = await Publicacion.findByPk(id);
+      if (!publicacion) {
+        return ResponseHelper.notFound(res, "Publicación no encontrada")
+      }
+      const persona = await Persona.findByPk(personaId);
+      if (!persona) {
+        return ResponseHelper.notFound(res, "Persona no encontrada")
+      }
+      await publicacion.addPersona(persona);
+      return ResponseHelper.success(res, null, "Persona asociada a la publicación")
+    } catch (error) {
+      return ResponseHelper.error(res, "Error al asociar persona", 500, error.message)
+    }
+  }
+
+  static async quitarPersona(req, res) {
+    try {
+      const { id, personaId } = req.params;
+      const publicacion = await Publicacion.findByPk(id);
+      if (!publicacion) {
+        return ResponseHelper.notFound(res, "Publicación no encontrada")
+      }
+      const persona = await Persona.findByPk(personaId);
+      if (!persona) {
+        return ResponseHelper.notFound(res, "Persona no encontrada")
+      }
+      await publicacion.removePersona(persona);
+      return ResponseHelper.success(res, null, "Persona desasociada de la publicación")
+    } catch (error) {
+      return ResponseHelper.error(res, "Error al desasociar persona", 500, error.message)
     }
   }
 }

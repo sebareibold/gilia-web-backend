@@ -82,4 +82,14 @@ router.delete("/:id", async (req, res) => {
   }
 })
 
+// Publicaciones asociadas
+router.get('/:id/publicaciones', LineaExtensionManager.obtenerPublicaciones)
+router.post('/:id/publicaciones', LineaExtensionManager.agregarPublicacion)
+router.delete('/:id/publicaciones/:publicacionId', LineaExtensionManager.quitarPublicacion)
+
+// Proyectos asociados
+router.get('/:id/proyectos', LineaExtensionManager.obtenerProyectos)
+router.post('/:id/proyectos', LineaExtensionManager.agregarProyecto)
+router.delete('/:id/proyectos/:proyectoId', LineaExtensionManager.quitarProyecto)
+
 module.exports = router

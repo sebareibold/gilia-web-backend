@@ -1,16 +1,10 @@
-const BaseService = require("../service/BaseService")
-const RepositoryFactory = require("../repositories/RepositoryFactory")
-const ResponseHelper = require("../utils/responseHelper")
-
-// Crear el servicio usando el factory
 const { Persona } = require("../models")
-const personaRepository = RepositoryFactory.create("personas", Persona)
-const personaService = new BaseService(personaRepository)
+const ResponseHelper = require("../utils/responseHelper")
 
 class PersonaManager {
   static async obtenerTodos(req, res) {
     try {
-      const result = await personaService.findAll(req.query)
+      const result = await Persona.findAll(req.query)
 
       return ResponseHelper.successWithPagination(
         res,
@@ -26,7 +20,9 @@ class PersonaManager {
   static async obtenerPorId(req, res) {
     try {
       const { id } = req.params
-      const persona = await personaService.findById(id, ["usuario", "publicaciones"])
+      const persona = await Persona.findByPk(id, {
+        include: ["usuario", "publicaciones"],
+      })
 
       return ResponseHelper.success(res, persona, "Persona encontrada")
     } catch (error) {
@@ -51,7 +47,7 @@ class PersonaManager {
         usuario_id,
       }
 
-      const persona = await personaService.create(personaData)
+      const persona = await Persona.create(personaData)
 
       return ResponseHelper.created(res, persona, "Persona creada exitosamente")
     } catch (error) {
@@ -64,9 +60,14 @@ class PersonaManager {
       const { id } = req.params
       const updateData = req.body
 
-      const persona = await personaService.update(id, updateData)
+      const persona = await Persona.findByPk(id)
+      if (!persona) {
+        return ResponseHelper.notFound(res, "Persona no encontrada")
+      }
 
-      return ResponseHelper.success(res, persona, "Persona actualizada exitosamente")
+      const updatedPersona = await persona.update(updateData)
+
+      return ResponseHelper.success(res, updatedPersona, "Persona actualizada exitosamente")
     } catch (error) {
       if (error.status === 404) {
         return ResponseHelper.notFound(res, "Persona no encontrada")
@@ -78,7 +79,11 @@ class PersonaManager {
   static async eliminar(req, res) {
     try {
       const { id } = req.params
-      await personaService.delete(id)
+      const persona = await Persona.findByPk(id)
+      if (!persona) {
+        return ResponseHelper.notFound(res, "Persona no encontrada")
+      }
+      await persona.destroy()
 
       return ResponseHelper.success(res, null, "Persona eliminada exitosamente")
     } catch (error) {
@@ -86,6 +91,61 @@ class PersonaManager {
         return ResponseHelper.notFound(res, "Persona no encontrada")
       }
       return ResponseHelper.error(res, "Error al eliminar persona", 500, error.message)
+    }
+  }
+
+  static async obtenerPublicaciones(req, res) {
+    try {
+      const { id } = req.params;
+      const persona = await Persona.findByPk(id, {
+        include: ["publicaciones"],
+      });
+      if (!persona) {
+        return ResponseHelper.notFound(res, "Persona no encontrada");
+      }
+      const publicaciones = persona.publicaciones;
+      return ResponseHelper.success(res, publicaciones, "Publicaciones asociadas a la persona");
+    } catch (error) {
+      return ResponseHelper.error(res, "Error al obtener publicaciones", 500, error.message);
+    }
+  }
+
+  static async agregarPublicacion(req, res) {
+    try {
+      const { id } = req.params;
+      const { publicacionId } = req.body;
+      const persona = await Persona.findByPk(id);
+      if (!persona) {
+        return ResponseHelper.notFound(res, "Persona no encontrada");
+      }
+      const { Publicacion } = require("../models");
+      const publicacion = await Publicacion.findByPk(publicacionId);
+      if (!publicacion) {
+        return ResponseHelper.notFound(res, "Publicación no encontrada");
+      }
+      await persona.addPublicacion(publicacion);
+      return ResponseHelper.success(res, null, "Publicación asociada a la persona");
+    } catch (error) {
+      return ResponseHelper.error(res, "Error al asociar publicación", 500, error.message);
+    }
+  }
+
+  static async quitarPublicacion(req, res) {
+    try {
+      const { id, publicacionId } = req.params;
+      const persona = await Persona.findByPk(id);
+      if (!persona) {
+        return ResponseHelper.notFound(res, "Persona no encontrada");
+      }
+      const { Publicacion } = require("../models");
+      const publicacion = await Publicacion.findByPk(publicacionId);
+      if (!publicacion) {
+        return ResponseHelper.notFound(res, "Publicación no encontrada");
+      }
+      await persona.removePublicacion(publicacion);
+      return ResponseHelper.success(res, null, "Publicación desasociada de la persona");
+    } catch (error) {
+      return ResponseHelper.error(res, "Error al desasociar publicación", 500, error.message);
     }
   }
 }

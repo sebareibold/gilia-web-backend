@@ -1,16 +1,10 @@
-const BaseService = require("../service/BaseService")
-const RepositoryFactory = require("../repositories/RepositoryFactory")
-const ResponseHelper = require("../utils/responseHelper")
-
-// Crear el servicio usando el factory
 const { Novedad } = require("../models")
-const novedadRepository = RepositoryFactory.create("novedades", Novedad)
-const novedadService = new BaseService(novedadRepository)
+const ResponseHelper = require("../utils/responseHelper")
 
 class NovedadManager {
   static async obtenerTodos(req, res) {
     try {
-      const result = await novedadService.findAll(req.query)
+      const result = await Novedad.findAll(req.query)
 
       return ResponseHelper.successWithPagination(
         res,
@@ -26,7 +20,7 @@ class NovedadManager {
   static async obtenerPorId(req, res) {
     try {
       const { id } = req.params
-      const novedad = await novedadService.findById(id)
+      const novedad = await Novedad.findByPk(id)
 
       return ResponseHelper.success(res, novedad, "Novedad encontrada")
     } catch (error) {
@@ -39,17 +33,28 @@ class NovedadManager {
 
   static async crear(req, res) {
     try {
-      const { titulo, descripcion, link, imagen, fecha_publicacion } = req.body
+      const { titulo, descripcion, link, imagen, fecha } = req.body
+
+      // Validaciones básicas
+      if (!titulo || typeof titulo !== 'string' || titulo.length < 3) {
+        return ResponseHelper.error(res, "El título es requerido y debe tener al menos 3 caracteres", 400)
+      }
+      if (link && typeof link === 'string' && !/^https?:\/\//.test(link)) {
+        return ResponseHelper.error(res, "El link debe ser una URL válida", 400)
+      }
+      if (imagen && typeof imagen === 'string' && !/^https?:\/\//.test(imagen)) {
+        return ResponseHelper.error(res, "La imagen debe ser una URL válida", 400)
+      }
 
       const novedadData = {
         titulo,
         descripcion,
         link,
         imagen,
-        fecha_publicacion: fecha_publicacion || new Date().toISOString(),
+        fecha: fecha || new Date().toISOString(),
       }
 
-      const novedad = await novedadService.create(novedadData)
+      const novedad = await Novedad.create(novedadData)
 
       return ResponseHelper.created(res, novedad, "Novedad creada exitosamente")
     } catch (error) {
@@ -62,9 +67,10 @@ class NovedadManager {
       const { id } = req.params
       const updateData = req.body
 
-      const novedad = await novedadService.update(id, updateData)
+      const novedad = await Novedad.update(updateData, { where: { id } })
+      const updatedNovedad = await Novedad.findByPk(id)
 
-      return ResponseHelper.success(res, novedad, "Novedad actualizada exitosamente")
+      return ResponseHelper.success(res, updatedNovedad, "Novedad actualizada exitosamente")
     } catch (error) {
       if (error.status === 404) {
         return ResponseHelper.notFound(res, "Novedad no encontrada")
@@ -76,7 +82,7 @@ class NovedadManager {
   static async eliminar(req, res) {
     try {
       const { id } = req.params
-      await novedadService.delete(id)
+      await Novedad.destroy({ where: { id } })
 
       return ResponseHelper.success(res, null, "Novedad eliminada exitosamente")
     } catch (error) {

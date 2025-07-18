@@ -70,14 +70,16 @@ module.exports = (sequelize) => {
       foreignKey: 'persona_id',
       otherKey: 'proyecto_id',
     });
+    Persona.belongsToMany(models.Publicacion, {
+      through: 'PersonaPublicacion',
+      as: 'publicaciones',
+      foreignKey: 'persona_id',
+      otherKey: 'publicacion_id',
+    });
     // Asociaciones existentes
     Persona.belongsTo(models.Usuario, {
       foreignKey: 'usuario_id',
       as: 'usuario',
-    });
-    Persona.hasMany(models.Publicacion, {
-      foreignKey: 'persona_id',
-      as: 'publicaciones',
     });
   };
 

@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize")
 
 module.exports = (sequelize) => {
-  const Novedad = sequelize.define(
-    "Novedad",
+  const Herramienta = sequelize.define(
+    "Herramienta",
     {
       id: {
         type: DataTypes.INTEGER,
@@ -27,34 +27,26 @@ module.exports = (sequelize) => {
           isUrl: true,
         },
       },
-      imagen: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      fecha: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
     },
     {
-      tableName: "novedades",
+      tableName: "herramientas",
     },
   )
 
-  Novedad.associate = (models) => {
-    Novedad.belongsToMany(models.LineaInvestigacion, {
-      through: 'NovedadLineaInvestigacion',
+  Herramienta.associate = (models) => {
+    Herramienta.belongsToMany(models.LineaInvestigacion, {
+      through: 'HerramientaLineaInvestigacion',
       as: 'lineasInvestigacion',
-      foreignKey: 'novedad_id',
+      foreignKey: 'herramienta_id',
       otherKey: 'linea_investigacion_id',
     });
-    Novedad.belongsToMany(models.LineaExtension, {
-      through: 'NovedadLineaExtension',
+    Herramienta.belongsToMany(models.LineaExtension, {
+      through: 'HerramientaLineaExtension',
       as: 'lineasExtension',
-      foreignKey: 'novedad_id',
+      foreignKey: 'herramienta_id',
       otherKey: 'linea_extension_id',
     });
   };
 
-  return Novedad
-}
+  return Herramienta
+} 

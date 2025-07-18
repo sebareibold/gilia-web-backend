@@ -5,12 +5,7 @@ const ProyectoManager = require("../managers/ProyectoManager")
 
 // GET /api/proyectos - Obtener todos
 router.get("/", async (req, res) => {
-  try {
-    const proyectos = await ProyectoManager.obtenerTodos(req, res)
-    res.status(200).json({ success: true, proyectos })
-  } catch (error) {
-    res.status(500).json({ success: false, error: "Error interno del servidor" })
-  }
+  await ProyectoManager.obtenerTodos(req, res)
 })
 
 // GET /api/proyectos/:id - Obtener uno
@@ -19,53 +14,21 @@ router.get("/:id", async (req, res) => {
   if (!id || isNaN(Number(id))) {
     return res.status(400).json({ success: false, error: "ID inválido" })
   }
-  try {
-    const proyecto = await ProyectoManager.obtenerPorId(req, res)
-    if (!proyecto) {
-      return res.status(404).json({ success: false, error: "Proyecto no encontrado" })
-    }
-    res.status(200).json({ success: true, proyecto })
-  } catch (error) {
-    res.status(500).json({ success: false, error: "Error interno del servidor" })
-  }
+  await ProyectoManager.obtenerPorId(req, res)
 })
 
 // POST /api/proyectos - Crear
 router.post("/", async (req, res) => {
-  const { nombre, descripcion } = req.body
-  if (!nombre || typeof nombre !== "string") {
-    return res.status(400).json({ success: false, error: "Nombre es requerido y debe ser string" })
-  }
-  if (!descripcion || typeof descripcion !== "string") {
-    return res.status(400).json({ success: false, error: "Descripción es requerida y debe ser string" })
-  }
-  try {
-    const proyecto = await ProyectoManager.crear(req, res)
-    res.status(201).json({ success: true, proyecto })
-  } catch (error) {
-    res.status(500).json({ success: false, error: "Error interno del servidor" })
-  }
+  await ProyectoManager.crear(req, res)
 })
 
 // PUT /api/proyectos/:id - Actualizar
 router.put("/:id", async (req, res) => {
   const { id } = req.params
-  const { nombre, descripcion } = req.body
   if (!id || isNaN(Number(id))) {
     return res.status(400).json({ success: false, error: "ID inválido" })
   }
-  if (!nombre || typeof nombre !== "string") {
-    return res.status(400).json({ success: false, error: "Nombre es requerido y debe ser string" })
-  }
-  if (!descripcion || typeof descripcion !== "string") {
-    return res.status(400).json({ success: false, error: "Descripción es requerida y debe ser string" })
-  }
-  try {
-    const proyecto = await ProyectoManager.actualizar(req, res)
-    res.status(200).json({ success: true, proyecto })
-  } catch (error) {
-    res.status(500).json({ success: false, error: "Error interno del servidor" })
-  }
+  await ProyectoManager.actualizar(req, res)
 })
 
 // DELETE /api/proyectos/:id - Eliminar
@@ -74,12 +37,22 @@ router.delete("/:id", async (req, res) => {
   if (!id || isNaN(Number(id))) {
     return res.status(400).json({ success: false, error: "ID inválido" })
   }
-  try {
-    const resultado = await ProyectoManager.eliminar(req, res)
-    res.status(200).json({ success: true, resultado })
-  } catch (error) {
-    res.status(500).json({ success: false, error: "Error interno del servidor" })
-  }
+  await ProyectoManager.eliminar(req, res)
 })
+
+// Personas asociadas
+router.get('/:id/personas', ProyectoManager.obtenerPersonas)
+router.post('/:id/personas', ProyectoManager.agregarPersona)
+router.delete('/:id/personas/:personaId', ProyectoManager.quitarPersona)
+
+// Líneas de investigación asociadas
+router.get('/:id/lineas-investigacion', ProyectoManager.obtenerLineasInvestigacion)
+router.post('/:id/lineas-investigacion', ProyectoManager.agregarLineaInvestigacion)
+router.delete('/:id/lineas-investigacion/:lineaId', ProyectoManager.quitarLineaInvestigacion)
+
+// Líneas de extensión asociadas
+router.get('/:id/lineas-extension', ProyectoManager.obtenerLineasExtension)
+router.post('/:id/lineas-extension', ProyectoManager.agregarLineaExtension)
+router.delete('/:id/lineas-extension/:lineaId', ProyectoManager.quitarLineaExtension)
 
 module.exports = router

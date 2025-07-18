@@ -16,30 +16,17 @@ module.exports = (sequelize) => {
           len: [3, 300],
         },
       },
-      categoria: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       fecha: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      links: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
+      link: {
+        type: DataTypes.STRING,
         allowNull: true,
-        defaultValue: [],
       },
       informacion: {
         type: DataTypes.TEXT,
         allowNull: true,
-      },
-      persona_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "personas",
-          key: "id",
-        },
       },
     },
     {
@@ -48,10 +35,20 @@ module.exports = (sequelize) => {
   )
 
   Publicacion.associate = (models) => {
-    Publicacion.belongsTo(models.Persona, {
-      foreignKey: "persona_id",
-      as: "persona",
-    })
+    Publicacion.belongsTo(models.LineaInvestigacion, {
+      foreignKey: 'linea_investigacion_id',
+      as: 'lineaInvestigacion',
+    });
+    Publicacion.belongsTo(models.LineaExtension, {
+      foreignKey: 'linea_extension_id',
+      as: 'lineaExtension',
+    });
+    Publicacion.belongsToMany(models.Persona, {
+      through: 'PersonaPublicacion',
+      as: 'personas',
+      foreignKey: 'publicacion_id',
+      otherKey: 'persona_id',
+    });
   }
 
   return Publicacion

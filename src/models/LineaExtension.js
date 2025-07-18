@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      nombre: {
+      titulo: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -25,7 +25,7 @@ module.exports = (sequelize) => {
         allowNull: true,
         defaultValue: [],
       },
-      activo: {
+      estado: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
@@ -41,6 +41,22 @@ module.exports = (sequelize) => {
       as: 'novedades',
       foreignKey: 'linea_extension_id',
       otherKey: 'novedad_id',
+    });
+    LineaExtension.belongsToMany(models.Herramienta, {
+      through: 'HerramientaLineaExtension',
+      as: 'herramientas',
+      foreignKey: 'linea_extension_id',
+      otherKey: 'herramienta_id',
+    });
+    LineaExtension.hasMany(models.Publicacion, {
+      foreignKey: 'linea_extension_id',
+      as: 'publicaciones',
+    });
+    LineaExtension.belongsToMany(models.Proyecto, {
+      through: 'LineaExtensionProyecto',
+      as: 'proyectos',
+      foreignKey: 'linea_extension_id',
+      otherKey: 'proyecto_id',
     });
   };
 

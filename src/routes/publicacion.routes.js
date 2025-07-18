@@ -82,4 +82,9 @@ router.delete("/:id", async (req, res) => {
   }
 })
 
+// Personas asociadas
+router.get('/:id/personas', PublicacionManager.obtenerPersonas)
+router.post('/:id/personas', PublicacionManager.agregarPersona)
+router.delete('/:id/personas/:personaId', PublicacionManager.quitarPersona)
+
 module.exports = router
