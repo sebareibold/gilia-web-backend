@@ -17,10 +17,7 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
-      activo: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-      },
+
     },
     {
       tableName: "contenido_extension",

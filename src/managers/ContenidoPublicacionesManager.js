@@ -37,26 +37,24 @@ class ContenidoPublicacionesManager {
 
   static async obtenerPorId(req, res) {
     try {
-      const { id } = req.params
-      const contenido = await ContenidoPublicaciones.findByPk(id)
-
+      const { id } = req.params;
+      const contenido = await ContenidoPublicaciones.findByPk(id);
       if (!contenido) {
         return res.status(404).json({
           success: false,
-          message: "Contenido de publicaciones no encontrado",
-        })
+          message: 'Contenido de publicaciones no encontrado',
+        });
       }
-
       res.json({
         success: true,
         data: contenido,
-      })
+      });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: "Error al obtener contenido de publicaciones",
+        message: 'Error al obtener contenido de publicaciones',
         error: error.message,
-      })
+      });
     }
   }
 
@@ -118,28 +116,25 @@ class ContenidoPublicacionesManager {
 
   static async eliminar(req, res) {
     try {
-      const { id } = req.params
-      const contenido = await ContenidoPublicaciones.findByPk(id)
-
+      const { id } = req.params;
+      const contenido = await ContenidoPublicaciones.findByPk(id);
       if (!contenido) {
         return res.status(404).json({
           success: false,
-          message: "Contenido de publicaciones no encontrado",
-        })
+          message: 'Contenido de publicaciones no encontrado',
+        });
       }
-
-      await contenido.destroy()
-
+      await contenido.destroy();
       res.json({
         success: true,
-        message: "Contenido de publicaciones eliminado exitosamente",
-      })
+        message: 'Contenido de publicaciones eliminado exitosamente',
+      });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: "Error al eliminar contenido de publicaciones",
+        message: 'Error al eliminar contenido de publicaciones',
         error: error.message,
-      })
+      });
     }
   }
 }

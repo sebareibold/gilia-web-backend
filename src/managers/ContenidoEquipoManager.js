@@ -39,23 +39,21 @@ class ContenidoEquipoManager {
     try {
       const { id } = req.params;
       const contenido = await ContenidoEquipo.findByPk(id);
-
       if (!contenido) {
         return res.status(404).json({
           success: false,
-          message: 'Contenido de equipo no encontrado'
+          message: 'Contenido de equipo no encontrado',
         });
       }
-
       res.json({
         success: true,
-        data: contenido
+        data: contenido,
       });
     } catch (error) {
       res.status(500).json({
         success: false,
         message: 'Error al obtener contenido de equipo',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -120,26 +118,23 @@ class ContenidoEquipoManager {
   static async eliminar(req, res) {
     try {
       const { id } = req.params;
-      const deleted = await ContenidoEquipo.destroy({
-        where: { id: id }
-      });
-
-      if (deleted) {
-        res.json({
-          success: true,
-          message: 'Contenido de equipo eliminado exitosamente'
-        });
-      } else {
-        res.status(404).json({
+      const contenido = await ContenidoEquipo.findByPk(id);
+      if (!contenido) {
+        return res.status(404).json({
           success: false,
-          message: 'Contenido de equipo no encontrado'
+          message: 'Contenido de equipo no encontrado',
         });
       }
+      await contenido.destroy();
+      res.json({
+        success: true,
+        message: 'Contenido de equipo eliminado exitosamente',
+      });
     } catch (error) {
       res.status(500).json({
         success: false,
         message: 'Error al eliminar contenido de equipo',
-        error: error.message
+        error: error.message,
       });
     }
   }

@@ -22,10 +22,6 @@ module.exports = (sequelize) => {
         allowNull: true,
         defaultValue: [],
       },
-      activo: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-      },
     },
     {
       tableName: "contenido_novedades",
