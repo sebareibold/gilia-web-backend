@@ -2,10 +2,7 @@ const net = require("net")
 const app = require("./src/server")
 
 // Solo importar sequelize si se va a usar base de datos
-let sequelize = null
-if (process.env.USE_DATABASE === "true") {
-  sequelize = require("./src/models").sequelize
-}
+let sequelize = require("./src/models").sequelize;
 
 // Función para encontrar un puerto disponible
 const findAvailablePort = (startPort) => {
@@ -41,21 +38,18 @@ const getPort = async () => {
 
 // Función para inicializar la base de datos (solo si se usa)
 const initializeDatabase = async () => {
-  if (process.env.USE_DATABASE !== "true") {
-    return
-  }
-
   try {
-    await sequelize.authenticate()
-
-    // Sincronizar modelos (solo en desarrollo)
+    await sequelize.authenticate();
+    console.log("✅ Conexión a la base de datos establecida correctamente");
     if (process.env.NODE_ENV === "development") {
-      await sequelize.sync({ alter: true })
+      await sequelize.sync({ alter: true });
+      console.log("✅ Modelos sincronizados con la base de datos");
     }
   } catch (error) {
-    throw error
+    console.error("❌ Error al conectar con la base de datos:", error);
+    process.exit(1);
   }
-}
+};
 
 // Función para inicializar el servidor
 const initializeServer = async () => {

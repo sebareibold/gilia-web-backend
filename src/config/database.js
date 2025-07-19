@@ -9,7 +9,7 @@ if (process.env.DATABASE_URL) {
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: "postgres",
     protocol: "postgres",
-    logging: process.env.NODE_ENV === "development" ? console.log : false,
+    logging: false,
     ssl: true,
     dialectOptions: {
       ssl: {
@@ -33,7 +33,7 @@ if (process.env.DATABASE_URL) {
     database: process.env.DB_NAME || "research_db",
     username: process.env.DB_USER || "postgres",
     password: process.env.DB_PASSWORD || "password",
-    logging: process.env.NODE_ENV === "development" ? console.log : false,
+    logging: false,
     pool: {
       max: 5,
       min: 0,
