@@ -632,59 +632,12 @@ curl -X POST http://localhost:8080/api/usuarios/login \
   }'
 ```
 
-### Respuestas de la API
-
-#### Respuesta Exitosa
-```json
-{
-  "success": true,
-  "message": "Recurso obtenido exitosamente",
-  "data": { ... },
-  "timestamp": "2024-01-15T10:30:00.000Z"
-}
-```
-
-#### Respuesta con Paginación
-```json
-{
-  "success": true,
-  "message": "Recursos obtenidos exitosamente",
-  "data": [ ... ],
-  "pagination": {
-    "total": 50,
-    "page": 1,
-    "limit": 10,
-    "totalPages": 5
-  },
-  "timestamp": "2024-01-15T10:30:00.000Z"
-}
-```
-
-#### Respuesta de Error
-```json
-{
-  "success": false,
-  "message": "Recurso no encontrado",
-  "timestamp": "2024-01-15T10:30:00.000Z"
-}
-```
-
-## 🤝 Contribución
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.md) para detalles.
 
 ## 👥 Equipo
 
-- **GILIA** - Grupo de Investigación en Lenguajes e Inteligencia Artificial
-- **Universidad Nacional del Comahue** - Facultad de Informática
+- **Sebastian Alejandro Reibold** 
+- **Cristopher Ovaillos** 
+
 
 ---
 
