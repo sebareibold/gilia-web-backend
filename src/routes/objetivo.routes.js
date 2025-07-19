@@ -1,4 +1,3 @@
-console.log('INICIO objetivoRoutes.js')
 const express = require("express")
 const router = express.Router()
 const ObjetivoManager = require("../managers/ObjetivoManager")

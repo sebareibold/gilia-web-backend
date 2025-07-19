@@ -28,6 +28,22 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
+      linea_investigacion_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "lineas_investigacion",
+          key: "id",
+        },
+      },
+      linea_extension_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "lineas_extension",
+          key: "id",
+        },
+      },
     },
     {
       tableName: "publicaciones",
@@ -36,19 +52,19 @@ module.exports = (sequelize) => {
 
   Publicacion.associate = (models) => {
     Publicacion.belongsTo(models.LineaInvestigacion, {
-      foreignKey: 'linea_investigacion_id',
-      as: 'lineaInvestigacion',
-    });
+      foreignKey: "linea_investigacion_id",
+      as: "lineaInvestigacion",
+    })
     Publicacion.belongsTo(models.LineaExtension, {
-      foreignKey: 'linea_extension_id',
-      as: 'lineaExtension',
-    });
+      foreignKey: "linea_extension_id",
+      as: "lineaExtension",
+    })
     Publicacion.belongsToMany(models.Persona, {
-      through: 'PersonaPublicacion',
-      as: 'personas',
-      foreignKey: 'publicacion_id',
-      otherKey: 'persona_id',
-    });
+      through: "PersonaPublicacion",
+      as: "personas",
+      foreignKey: "publicacion_id",
+      otherKey: "persona_id",
+    })
   }
 
   return Publicacion

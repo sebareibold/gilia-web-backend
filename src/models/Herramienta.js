@@ -27,6 +27,10 @@ module.exports = (sequelize) => {
           isUrl: true,
         },
       },
+      activo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
     },
     {
       tableName: "herramientas",
@@ -35,18 +39,18 @@ module.exports = (sequelize) => {
 
   Herramienta.associate = (models) => {
     Herramienta.belongsToMany(models.LineaInvestigacion, {
-      through: 'HerramientaLineaInvestigacion',
-      as: 'lineasInvestigacion',
-      foreignKey: 'herramienta_id',
-      otherKey: 'linea_investigacion_id',
-    });
+      through: "HerramientaLineaInvestigacion",
+      as: "lineasInvestigacion",
+      foreignKey: "herramienta_id",
+      otherKey: "linea_investigacion_id",
+    })
     Herramienta.belongsToMany(models.LineaExtension, {
-      through: 'HerramientaLineaExtension',
-      as: 'lineasExtension',
-      foreignKey: 'herramienta_id',
-      otherKey: 'linea_extension_id',
-    });
-  };
+      through: "HerramientaLineaExtension",
+      as: "lineasExtension",
+      foreignKey: "herramienta_id",
+      otherKey: "linea_extension_id",
+    })
+  }
 
   return Herramienta
-} 
+}

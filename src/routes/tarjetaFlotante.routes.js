@@ -1,4 +1,3 @@
-console.log('INICIO tarjetaFlotanteRoutes.js')
 const express = require("express")
 const router = express.Router()
 const TarjetaFlotanteManager = require("../managers/TarjetaFlotanteManager")

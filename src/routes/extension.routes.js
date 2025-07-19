@@ -1,4 +1,3 @@
-console.log('INICIO extensionRoutes.js')
 const express = require("express")
 const router = express.Router()
 const ExtensionManager = require("../managers/ExtensionManager")

@@ -1,17 +1,12 @@
-console.log('INICIO contenidoHomeRoutes.js')
 const express = require("express")
 const router = express.Router()
 const ContenidoHomeManager = require("../managers/ContenidoHomeManager")
 
-console.log('Antes de definir rutas en contenidoHomeRoutes.js')
-
 // GET / - Obtener todos
 router.get("/", async (req, res) => {
     try {
-        console.log('GET / - contenidoHome - obtenerTodos')
         await ContenidoHomeManager.obtenerTodos(req, res)
     } catch (error) {
-        console.error('Error en GET / contenidoHome:', error)
         res.status(500).json({
             error: 'Error interno del servidor',
             message: 'Ocurrió un error al obtener los contenidos de home'
@@ -22,7 +17,6 @@ router.get("/", async (req, res) => {
 // GET /:id - Obtener por ID
 router.get("/:id", async (req, res) => {
     try {
-        console.log('GET /:id - contenidoHome - obtenerPorId')
         const { id } = req.params
         
         // Validar que id sea un número válido
@@ -35,7 +29,6 @@ router.get("/:id", async (req, res) => {
         
         await ContenidoHomeManager.obtenerPorId(req, res)
     } catch (error) {
-        console.error('Error en GET /:id contenidoHome:', error)
         res.status(500).json({
             error: 'Error interno del servidor',
             message: 'Ocurrió un error al obtener el contenido de home'
@@ -46,7 +39,6 @@ router.get("/:id", async (req, res) => {
 // POST / - Crear nuevo
 router.post("/", async (req, res) => {
     try {
-        console.log('POST / - contenidoHome - crear')
         const { body } = req
         
         // Validar que el body no esté vacío
@@ -59,7 +51,6 @@ router.post("/", async (req, res) => {
         
         await ContenidoHomeManager.crear(req, res)
     } catch (error) {
-        console.error('Error en POST / contenidoHome:', error)
         res.status(500).json({
             error: 'Error interno del servidor',
             message: 'Ocurrió un error al crear el contenido de home'
@@ -70,7 +61,6 @@ router.post("/", async (req, res) => {
 // PUT /:id - Actualizar
 router.put("/:id", async (req, res) => {
     try {
-        console.log('PUT /:id - contenidoHome - actualizar')
         const { id } = req.params
         const { body } = req
         
@@ -92,7 +82,6 @@ router.put("/:id", async (req, res) => {
         
         await ContenidoHomeManager.actualizar(req, res)
     } catch (error) {
-        console.error('Error en PUT /:id contenidoHome:', error)
         res.status(500).json({
             error: 'Error interno del servidor',
             message: 'Ocurrió un error al actualizar el contenido de home'
@@ -103,7 +92,6 @@ router.put("/:id", async (req, res) => {
 // DELETE /:id - Eliminar
 router.delete("/:id", async (req, res) => {
     try {
-        console.log('DELETE /:id - contenidoHome - eliminar')
         const { id } = req.params
         
         // Validar que id sea un número válido
@@ -116,7 +104,6 @@ router.delete("/:id", async (req, res) => {
         
         await ContenidoHomeManager.eliminar(req, res)
     } catch (error) {
-        console.error('Error en DELETE /:id contenidoHome:', error)
         res.status(500).json({
             error: 'Error interno del servidor',
             message: 'Ocurrió un error al eliminar el contenido de home'
@@ -124,5 +111,4 @@ router.delete("/:id", async (req, res) => {
     }
 })
 
-console.log('Fin de contenidoHomeRoutes.js')
 module.exports = router

@@ -4,11 +4,27 @@ const ResponseHelper = require("../utils/responseHelper")
 class HerramientaManager {
   static async obtenerTodos(req, res) {
     try {
-      const herramientas = await Herramienta.findAll(req.query)
+      const { page = 1, limit = 10, activo } = req.query
+      const offset = (page - 1) * limit
+      const whereClause = {}
+      if (activo !== undefined) whereClause.activo = activo === "true"
+
+      const herramientas = await Herramienta.findAndCountAll({
+        where: whereClause,
+        limit: Number.parseInt(limit),
+        offset: Number.parseInt(offset),
+        order: [["created_at", "DESC"]],
+      })
+
       return ResponseHelper.successWithPagination(
         res,
-        herramientas.data,
-        herramientas.pagination,
+        herramientas.rows,
+        {
+          total: herramientas.count,
+          page: Number.parseInt(page),
+          limit: Number.parseInt(limit),
+          totalPages: Math.ceil(herramientas.count / limit),
+        },
         "Herramientas obtenidas exitosamente",
       )
     } catch (error) {
@@ -20,11 +36,11 @@ class HerramientaManager {
     try {
       const { id } = req.params
       const herramienta = await Herramienta.findByPk(id)
-      return ResponseHelper.success(res, herramienta, "Herramienta encontrada")
-    } catch (error) {
-      if (error.status === 404) {
+      if (!herramienta) {
         return ResponseHelper.notFound(res, "Herramienta no encontrada")
       }
+      return ResponseHelper.success(res, herramienta, "Herramienta encontrada")
+    } catch (error) {
       return ResponseHelper.error(res, "Error al obtener herramienta", 500, error.message)
     }
   }
@@ -34,10 +50,10 @@ class HerramientaManager {
       const { titulo, descripcion, link } = req.body
 
       // Validaciones básicas
-      if (!titulo || typeof titulo !== 'string' || titulo.length < 3) {
+      if (!titulo || typeof titulo !== "string" || titulo.length < 3) {
         return ResponseHelper.error(res, "El título es requerido y debe tener al menos 3 caracteres", 400)
       }
-      if (link && typeof link === 'string' && !/^https?:\/\//.test(link)) {
+      if (link && typeof link === "string" && !/^https?:\/\//.test(link)) {
         return ResponseHelper.error(res, "El link debe ser una URL válida", 400)
       }
 
@@ -65,9 +81,6 @@ class HerramientaManager {
       const updatedHerramienta = await herramienta.update(updateData)
       return ResponseHelper.success(res, updatedHerramienta, "Herramienta actualizada exitosamente")
     } catch (error) {
-      if (error.status === 404) {
-        return ResponseHelper.notFound(res, "Herramienta no encontrada")
-      }
       return ResponseHelper.error(res, "Error al actualizar herramienta", 400, error.message)
     }
   }
@@ -82,9 +95,6 @@ class HerramientaManager {
       await herramienta.destroy()
       return ResponseHelper.success(res, null, "Herramienta eliminada exitosamente")
     } catch (error) {
-      if (error.status === 404) {
-        return ResponseHelper.notFound(res, "Herramienta no encontrada")
-      }
       return ResponseHelper.error(res, "Error al eliminar herramienta", 500, error.message)
     }
   }
@@ -202,4 +212,4 @@ class HerramientaManager {
   }
 }
 
-module.exports = HerramientaManager 
+module.exports = HerramientaManager

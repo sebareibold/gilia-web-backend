@@ -20,6 +20,8 @@ const contenidoPublicacionesRoutes = require("./contenidoPublicaciones.routes")
 const contenidoExtensionRoutes = require("./contenidoExtension.routes")
 const contenidoEquipoRoutes = require("./contenidoEquipo.routes")
 const contenidoGaleriaRoutes = require("./contenidoGaleria.routes")
+const herramientaRoutes = require("./herramienta.routes")
+const seccionGaleriaRoutes = require("./seccionGaleria.routes")
 
 // Configurar rutas
 router.use("/usuarios", usuarioRoutes)
@@ -40,5 +42,7 @@ router.use("/contenido-publicaciones", contenidoPublicacionesRoutes)
 router.use("/contenido-extension", contenidoExtensionRoutes)
 router.use("/contenido-equipo", contenidoEquipoRoutes)
 router.use("/contenido-galeria", contenidoGaleriaRoutes)
+router.use("/herramientas", herramientaRoutes)
+router.use("/seccion-galeria", seccionGaleriaRoutes)
 
 module.exports = router

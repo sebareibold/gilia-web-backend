@@ -1,4 +1,3 @@
-console.log('INICIO novedadRoutes.js')
 const express = require("express")
 const router = express.Router()
 const NovedadManager = require("../managers/NovedadManager")

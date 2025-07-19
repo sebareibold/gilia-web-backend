@@ -1,4 +1,3 @@
-console.log('INICIO publicacionRoutes.js')
 const express = require("express")
 const router = express.Router()
 const PublicacionManager = require("../managers/PublicacionManager")

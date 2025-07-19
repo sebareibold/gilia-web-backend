@@ -1,4 +1,3 @@
-console.log('INICIO proyectoRoutes.js')
 const express = require("express")
 const router = express.Router()
 const ProyectoManager = require("../managers/ProyectoManager")

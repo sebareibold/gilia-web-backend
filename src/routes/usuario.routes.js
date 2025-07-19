@@ -1,4 +1,3 @@
-console.log('INICIO usuarioRoutes.js')
 const express = require("express")
 const router = express.Router()
 const UsuarioManager = require("../managers/UsuarioManager")
@@ -93,5 +92,4 @@ router.post("/login", async (req, res) => {
   }
 })
 
-console.log('Fin de usuarioRoutes.js')
 module.exports = router

@@ -1,14 +1,6 @@
 const ResponseHelper = require("../utils/responseHelper")
 
 const errorHandler = (err, req, res, next) => {
-  console.error("Error capturado:", {
-    message: err.message,
-    stack: err.stack,
-    url: req.url,
-    method: req.method,
-    timestamp: new Date().toISOString(),
-  })
-
   // Error de validación de Sequelize
   if (err.name === "SequelizeValidationError") {
     const errors = err.errors.map((e) => ({

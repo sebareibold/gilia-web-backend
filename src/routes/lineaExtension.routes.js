@@ -1,4 +1,3 @@
-console.log('INICIO lineaExtensionRoutes.js')
 const express = require("express")
 const router = express.Router()
 const LineaExtensionManager = require("../managers/LineaExtensionManager")

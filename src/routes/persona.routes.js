@@ -1,4 +1,3 @@
-console.log('INICIO personaRoutes.js')
 const express = require("express")
 const router = express.Router()
 const PersonaManager = require("../managers/PersonaManager")

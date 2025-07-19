@@ -35,26 +35,15 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
       },
+      activo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
     },
     {
       tableName: "novedades",
     },
   )
-
-  Novedad.associate = (models) => {
-    Novedad.belongsToMany(models.LineaInvestigacion, {
-      through: 'NovedadLineaInvestigacion',
-      as: 'lineasInvestigacion',
-      foreignKey: 'novedad_id',
-      otherKey: 'linea_investigacion_id',
-    });
-    Novedad.belongsToMany(models.LineaExtension, {
-      through: 'NovedadLineaExtension',
-      as: 'lineasExtension',
-      foreignKey: 'novedad_id',
-      otherKey: 'linea_extension_id',
-    });
-  };
 
   return Novedad
 }

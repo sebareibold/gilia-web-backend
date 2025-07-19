@@ -25,7 +25,7 @@ module.exports = (sequelize) => {
         allowNull: true,
         defaultValue: [],
       },
-      estado: {
+      activo: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
@@ -36,29 +36,23 @@ module.exports = (sequelize) => {
   )
 
   LineaInvestigacion.associate = (models) => {
-    LineaInvestigacion.belongsToMany(models.Novedad, {
-      through: 'NovedadLineaInvestigacion',
-      as: 'novedades',
-      foreignKey: 'linea_investigacion_id',
-      otherKey: 'novedad_id',
-    });
     LineaInvestigacion.belongsToMany(models.Herramienta, {
-      through: 'HerramientaLineaInvestigacion',
-      as: 'herramientas',
-      foreignKey: 'linea_investigacion_id',
-      otherKey: 'herramienta_id',
-    });
+      through: "HerramientaLineaInvestigacion",
+      as: "herramientas",
+      foreignKey: "linea_investigacion_id",
+      otherKey: "herramienta_id",
+    })
     LineaInvestigacion.hasMany(models.Publicacion, {
-      foreignKey: 'linea_investigacion_id',
-      as: 'publicaciones',
-    });
+      foreignKey: "linea_investigacion_id",
+      as: "publicaciones",
+    })
     LineaInvestigacion.belongsToMany(models.Proyecto, {
-      through: 'LineaInvestigacionProyecto',
-      as: 'proyectos',
-      foreignKey: 'linea_investigacion_id',
-      otherKey: 'proyecto_id',
-    });
-  };
+      through: "LineaInvestigacionProyecto",
+      as: "proyectos",
+      foreignKey: "linea_investigacion_id",
+      otherKey: "proyecto_id",
+    })
+  }
 
   return LineaInvestigacion
 }

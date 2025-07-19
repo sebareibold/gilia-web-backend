@@ -1,4 +1,3 @@
-console.log('INICIO lineaInvestigacionRoutes.js')
 const express = require("express")
 const router = express.Router()
 const LineaInvestigacionManager = require("../managers/LineaInvestigacionManager")
