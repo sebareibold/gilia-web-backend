@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      titulo: {
+      nombre: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
