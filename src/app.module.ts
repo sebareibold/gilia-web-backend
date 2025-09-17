@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersController } from './modules/users/users.controller';
+import { UsersService } from './modules/users/users.service';
 
 @Module({
   imports: [
@@ -15,7 +17,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: true,        // crea/modifica tablas automáticamente según las entidades
       logging: true,            // muestra en consola el SQL que ejecuta
     }),
+
     
   ],
+  controllers: [UsersController],
+  providers: [UsersService],
 })
 export class AppModule {}

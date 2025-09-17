@@ -192,4 +192,4 @@ Se instala junto a class-transformer:
 npm install class-validator class-transformer
 ```
 
-u función es revisar que los datos que llegan en un DTO cumplan con las reglas que definas. Funciona a través de decoradores (ej: @IsEmail(), @IsNotEmpty(), @Length(), etc.). NestJS lo ejecuta gracias a los pipes globales que configuramos en main.ts con app.useGlobalPipes(new ValidationPipe()).
+Su función es revisar que los datos que llegan en un DTO cumplan con las reglas que definas. Funciona a través de decoradores (ej: @IsEmail(), @IsNotEmpty(), @Length(), etc.). NestJS lo ejecuta gracias a los pipes globales que configuramos en main.ts con app.useGlobalPipes(new ValidationPipe()).
