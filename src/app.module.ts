@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersController } from './modules/users/users.controller';
 import { UsersService } from './modules/users/users.service';
+import { PersonasModule } from './modules/personas/personas.module';
 
 @Module({
   imports: [
@@ -17,6 +18,8 @@ import { UsersService } from './modules/users/users.service';
       synchronize: true,        // crea/modifica tablas automáticamente según las entidades
       logging: true,            // muestra en consola el SQL que ejecuta
     }),
+
+    PersonasModule,
 
     
   ],
