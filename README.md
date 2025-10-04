@@ -1,4 +1,4 @@
-# 🎓 G.I.L.I.A Backend
+#  G.I.L.I.A Backend
 
 ![NestJS](https://img.shields.io/badge/NestJS-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
@@ -19,6 +19,20 @@ Backend API profesional para el **Sistema de gestión del Grupo de Investigació
 ## Observacion de desarrollo
 
 Este proyecto backend se encuentra en desarrollo dentro del marco de la Beca PPU de la UNCO FAI. La implementación actual se está realizando de manera progresiva, lo que permite familiarizarnos con el framework NestJS y consolidar buenas prácticas de desarrollo de APIs. Debido a esto, la estructura y funcionalidades pueden experimentar cambios significativos a medida que avanzamos en el aprendizaje y la evolución del proyecto.
+
+## Implementacion hasta el momento
+
+Actualmente se han implementado las siguientes funcionalidades:
+
+*   **Personas**: Creacion, lectura, actualizacion y eliminacion de personas.
+*   **Proyectos**: Creacion, lectura, actualizacion y eliminacion de proyectos.
+*   **Publicaciones**: Creacion, lectura, actualizacion y eliminacion de publicaciones.
+
+Las rutas son: 
+
+*   **Personas**: /personas
+*   **Proyectos**: /proyectos
+*   **Publicaciones**: /publicaciones
 
 ---
 

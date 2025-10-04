@@ -1,4 +1,6 @@
 import { Entity, PrimaryColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Publicacion } from '../../publicaciones/entities/publicacion.entity';
+import { Proyecto } from '../../proyectos/entities/proyecto.entity';
 
 @Entity('personas')
 export class Persona {
