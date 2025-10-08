@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 import { Persona } from '../../personas/entities/persona.entity';
+import { LineaInvestigacion } from '../../linea-investigacion/entities/linea-investigacion.entity';
 
 export enum EstadoProyecto {
   EN_CURSO = 'en_curso',
@@ -40,15 +41,18 @@ export class Proyecto {
   })
   autores: Persona[];
 
-  // Relación con LineaInvestigación (M:M) - Por implementar
-  // @ManyToMany(() => LineaInvestigacion, linea => linea.proyectos)
-  // @JoinTable()
-  // lineasInvestigacion: LineaInvestigacion[];
+  // Relación con LineaInvestigación (M:M)
+  @ManyToMany(() => LineaInvestigacion, linea => linea.proyectos)
+  @JoinTable({
+    name: 'proyectos_lineas_investigacion',
+    joinColumn: { name: 'proyecto_id' },
+    inverseJoinColumn: { name: 'linea_investigacion_id' }
+  })
+  lineasInvestigacion: LineaInvestigacion[];
 
-  // Relación con LineaExtension (M:M) - Por implementar
-  // @ManyToMany(() => LineaExtension, linea => linea.proyectos)
-  // @JoinTable()
-  // lineasExtension: LineaExtension[];
+  // Relación con LineaExtension (M:N)
+  @ManyToMany(() => LineaExtension, linea => linea.proyectos)
+  lineasExtension: LineaExtension[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

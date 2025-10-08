@@ -25,11 +25,11 @@ export class Publicacion {
   @JoinTable()
   autores: Persona[];
 
-  // Relación con LineaInvestigación (1:M)
-  // @ManyToOne(() => LineaInvestigacion, (linea) => linea.publicaciones, { nullable: true })
-  // lineaInvestigacion: LineaInvestigacion;
+  // Relación con LineaInvestigacion (M:1)
+  @ManyToOne(() => LineaInvestigacion, (linea) => linea.publicaciones, { nullable: true })
+  lineaInvestigacion: LineaInvestigacion;
 
-  // Relación con LineaExtension (1:M)
-  // @ManyToOne(() => LineaExtension, (linea) => linea.publicaciones, { nullable: true })
-  // lineaExtension: LineaExtension;
+  // Relación con LineaExtension (M:1)
+  @ManyToOne(() => LineaExtension, (linea) => linea.publicaciones, { nullable: true })
+  lineaExtension: LineaExtension;
 }
